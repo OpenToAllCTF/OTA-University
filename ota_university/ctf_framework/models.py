@@ -11,6 +11,7 @@ class Title(models.Model):
     def __str__(self):
         return self.title
 
+
 class ChallengeCategory(models.Model):
     """
     CTF Challenge Categories that can be dynamically added
@@ -52,11 +53,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Earned Titles That Can Be Selected by User
-    titles = models.ManyToManyField(Title)
+    titles = models.ManyToManyField(Title, blank=True)
 
-    # Active Title, Can Be Made Any By Admin
-
-    active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True, null=True)
+    # Active Title, Can Be Set To Any (even non-earned) By Admin
+    active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True)
 
     # Completed Challenges
     challenges = models.ManyToManyField(Challenge)

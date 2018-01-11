@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Hello World!
+<br><br>
+Users
+<ul>
+{% for user in users %}
+    <li><a href="{% url 'ctf_framework:profile' user.id %}">{{ user }}</a></li>
+{% endfor %}
+</ul>
+<br>
+<br>
+Challenges
+<ul>
+    {% for challenge in challenges %}
+        <li>{{ challenge }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
