@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% if message %}
+    {{ message }}<br><br><br>
+{% endif %}
 
 Challenge: {{ challenge.name }}<br>
 Category: {{ challenge.category }}<br>
@@ -9,7 +12,14 @@ Status:
 {% if challenge_completed %}
     Completed
 {% else %}
-    Incomplete
+    Incomplete<br><br>
+    <form action="#" method="POST">
+    {% csrf_token %}
+        <label>Flag:
+            <input type="text" name="flag">
+        </label>
+    <input type="submit" value="Submit">
+    </form>
 {% endif %}
 
 {% endblock %}
