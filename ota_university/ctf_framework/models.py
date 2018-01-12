@@ -34,15 +34,15 @@ class Challenge(models.Model):
     CTF Challenges
     """
 
-    challenge_name = models.CharField(max_length=100)
-    challenge_description = models.CharField(max_length=1000)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000)
     flag = models.CharField(max_length=100)
     point_value = models.IntegerField(default=0)
     active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "{} | {} | {}".format(self.category, self.point_value, self.challenge_name)
+        return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
 
 class UserProfile(models.Model):
@@ -56,16 +56,31 @@ class UserProfile(models.Model):
     titles = models.ManyToManyField(Title, blank=True)
 
     # Active Title, Can Be Set To Any (even non-earned) By Admin
-    active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True)
+    active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True, null=True)
 
     # Completed Challenges
-    challenges = models.ManyToManyField(Challenge)
+    challenges = models.ManyToManyField(Challenge, blank=True)
 
     def __str__(self):
         return self.user.username
 
     def get_score(self):
         return sum([c.point_value for c in self.challenges.all()])
+
+    def get_completed_challenges(self):
+        """
+        Returns a dictionary of {str ChallengeCategory: [completed challenge,],}
+        """
+        completed_challenges = {}
+
+        for category in ChallengeCategory.objects.all():
+            completed_challenges[category.category] = []
+            for challenge in self.challenges.filter(category=category):
+                completed_challenges[category.category].append(challenge)
+
+        return completed_challenges
+
+
 
 
 

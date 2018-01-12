@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib import admin
 
 from .views import *
 
@@ -7,5 +8,7 @@ app_name = "ctf_framework"
 
 urlpatterns = [
     path('', home, name="home"),
-    path('profile/<int:user_id>/', profile, name="profile")
+    path('profile/<int:user_id>/', profile, name="profile"),
+    path('challenge/<int:challenge_id>/', challenge, name="challenge"),
+    path("logout/", logout, name="logout")
 ]

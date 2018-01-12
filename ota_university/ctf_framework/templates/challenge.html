@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+Challenge: {{ challenge.name }}<br>
+Category: {{ challenge.category }}<br>
+Description: {{ challenge.description }}<br>
+Value: {{ challenge.point_value }}<br>
+Status:
+{% if challenge_completed %}
+    Completed
+{% else %}
+    Incomplete
+{% endif %}
+
+{% endblock %}

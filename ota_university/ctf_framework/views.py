@@ -1,6 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib.auth import logout as django_logout
+from django.shortcuts import render, redirect
 from .models import UserProfile, Challenge
+
 
 # Create your views here.
 
@@ -19,10 +21,32 @@ def home(request):
 
 def profile(request, user_id):
     user = UserProfile.objects.get(id=user_id)
-    return HttpResponse("""
-    User: {}<br>
-    Title: {}<br>
-    Score: {}<br>
-    """.format(user, user.active_title, user.get_score()))
+    context = {
+        "user": user,
+        "completed_challenges": user.get_completed_challenges()
+    }
+    return render(request, "profile.html", context)
+
+
+def challenge(request, challenge_id):
+    user = UserProfile.objects.get(user=request.user)
+    challenge = Challenge.objects.get(id=challenge_id)
+
+    context = {
+        "challenge": challenge,
+        "user": user,
+        "challenge_completed": challenge in user.challenges.all()
+    }
+
+    return render(request, "challenge.html", context)
+
+
+def logout(request):
+    django_logout(request)
+    return redirect("ctf_framework:home")
+
+
+
+
 
 
