@@ -1,28 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
+  <div class="container-fluid">
+    <div class="table-responsive users-table">
+      <table class="table table-bordered">
+        <tr>
+          <th>Users</th>
+          <th>Score</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+          <td><a href="{% url 'ctf_framework:profile' user.id %}">{{ user }}</a></td>
+          <td>{{ user.get_score }}</td>
+        </tr>
+        {% endfor %}
 
-{% if request.user.is_authenticated %}
-    Logged In As: {{ user }}<br>
-    <a href="{% url 'ctf_framework:logout' %}">Logout</a>
-{% else %}
-    <a href="/admin">
-    Login
-    </a>
-{% endif%}
-<br><br><br>
-Users
-<ul>
-{% for user in users %}
-    <li><a href="{% url 'ctf_framework:profile' user.id %}">{{ user }} ({{ user.get_score }})</a></li>
-{% endfor %}
-</ul>
-<br>
-<br>
-Challenges
-<ul>
-    {% for challenge in challenges %}
-        <li><a href="{% url 'ctf_framework:challenge' challenge.id %}">{{ challenge }}</a></li>
-    {% endfor %}
-</ul>
-
+      </table>
+    </div>
+  </div>
 {% endblock %}
