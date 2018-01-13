@@ -79,14 +79,3 @@ class UserProfile(models.Model):
                 completed_challenges[category.category].append(challenge)
 
         return completed_challenges
-
-
-
-
-
-
-
-
-
-
-

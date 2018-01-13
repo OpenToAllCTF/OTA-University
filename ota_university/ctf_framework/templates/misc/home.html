@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "../layouts/base.html" %}
 {% block content %}
   <div class="container-fluid">
     <div class="table-responsive users-table">
@@ -9,7 +9,9 @@
         </tr>
         {% for user in users %}
         <tr>
-          <td><a href="{% url 'ctf_framework:profile' user.id %}">{{ user }}</a></td>
+          <td>
+            <a href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
+          </td>
           <td>{{ user.get_score }}</td>
         </tr>
         {% endfor %}
