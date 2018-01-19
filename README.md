@@ -24,7 +24,7 @@ https://api.slack.com/slack-apps
 - Name it OTA University or something similar
 - Set Workspace to OTA
 - Click Permissions
-- Add Redirect URL of <URL>/slack/login
+- Add Redirect URL of {URL}/slack/login
 - Under Scopes add: user.profile:read
 - Select "Basic Information" on left
 - Install Your App To Your Workspace (OTA)
