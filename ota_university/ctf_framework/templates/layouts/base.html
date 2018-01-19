@@ -22,7 +22,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left side -->
         <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{% url 'ctf_framework:home' %}">
+            <a class="nav-item nav-link" href="{% url 'ctf_framework:home#index' %}">
               Home
             </a>
         </div>
@@ -32,9 +32,9 @@
         {% if request.user.is_authenticated %}
           {% with request.user.UserProfile as user %}
           <a class="nav-item nav-link"
-             href="{% url 'ctf_framework:profile' user.id %}">{{ user }}</a>
+             href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
           <a class="nav-item nav-link"
-             href="{% url 'ctf_framework:logout' %}">Logout</a>
+             href="{% url 'ctf_framework:profile#logout' %}">Logout</a>
           {% endwith %}
         {% else %}
           <a class="nav-item nav-link" href="/slack/login">Login</a>

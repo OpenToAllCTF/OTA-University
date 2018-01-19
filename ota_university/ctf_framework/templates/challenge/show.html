@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "../layouts/base.html" %}
 {% block content %}
 {% if message %}
     {{ message }}<br><br><br>
@@ -13,7 +13,7 @@ Status:
     Completed
 {% else %}
     Incomplete<br><br>
-    <form action="#" method="POST">
+    <form action="{% url 'ctf_framework:challenge#submit' challenge.id %}" method="POST">
     {% csrf_token %}
         <label>Flag:
             <input type="text" name="flag">

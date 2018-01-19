@@ -6,8 +6,14 @@ from .views import *
 app_name = "ctf_framework"
 
 urlpatterns = [
-    path('', home, name="home"),
-    path('profile/<int:user_id>/', profile, name="profile"),
-    path('challenge/<int:challenge_id>/', challenge, name="challenge"),
-    path("logout/", logout, name="logout"),
+    # Misc
+    path('', home.index, name="home#index"),
+
+    # Profile
+    path('profile/<int:user_id>/', profile.show, name="profile#show"),
+    path("profile/logout", profile.logout, name="profile#logout"),
+
+    # Challenge
+    path('challenge/<int:challenge_id>/', challenge.submit, name="challenge#submit"),
+    path('challenge/<int:challenge_id>/', challenge.show, name="challenge#show")
 ]
