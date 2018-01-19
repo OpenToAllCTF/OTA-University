@@ -20,7 +20,7 @@ def home(request):
     return render(request, "home.html", context=context)
 
 
-def profile(request, user_id):
+def profile(request, user_id=None):
     user = UserProfile.objects.get(id=user_id)
     context = {
         "user": user,
@@ -47,12 +47,12 @@ def challenge(request, challenge_id):
         except ObjectDoesNotExist:
             message = "Incorrect!"
 
-    challenge = Challenge.objects.get(id=challenge_id)
+    _challenge = Challenge.objects.get(id=challenge_id)
 
     context = {
-        "challenge": challenge,
+        "challenge": _challenge,
         "user": user,
-        "challenge_completed": challenge in user.challenges.all(),
+        "challenge_completed": _challenge in user.challenges.all(),
         "message": message
     }
 

@@ -1,5 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django_slack_oauth.models import SlackUser
+from django.core.exceptions import ObjectDoesNotExist
+
+
+class CTFSlackUser(SlackUser):
+    """
+    Extending the django oauth SlackUser to support display names
+    """
+    display_name = models.CharField(max_length=100)
 
 
 class Title(models.Model):
@@ -49,8 +58,8 @@ class UserProfile(models.Model):
     """
     Used for storing all user profile information and statistics
     """
-    # Django User
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # Django User. Related Name is for retrieving UserProfile in templates (ex: request.user.UserProfile)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="UserProfile")
 
     # Earned Titles That Can Be Selected by User
     titles = models.ManyToManyField(Title, blank=True)
@@ -62,7 +71,7 @@ class UserProfile(models.Model):
     challenges = models.ManyToManyField(Challenge, blank=True)
 
     def __str__(self):
-        return self.user.username
+        return self.display_name()
 
     def get_score(self):
         return sum([c.point_value for c in self.challenges.all()])
@@ -79,6 +88,15 @@ class UserProfile(models.Model):
                 completed_challenges[category.category].append(challenge)
 
         return completed_challenges
+
+    def display_name(self):
+        """
+        If there's a slack user, return Slack display name. Else, use django username.
+        """
+        try:
+            return CTFSlackUser.objects.get(slacker=self.user).display_name
+        except ObjectDoesNotExist:
+            return self.user.username
 
 
 

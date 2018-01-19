@@ -30,14 +30,14 @@
         <!-- Right side -->
         <div class="navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
-          {% with request.user as user %}
+          {% with request.user.UserProfile as user %}
           <a class="nav-item nav-link"
              href="{% url 'ctf_framework:profile' user.id %}">{{ user }}</a>
           <a class="nav-item nav-link"
              href="{% url 'ctf_framework:logout' %}">Logout</a>
           {% endwith %}
         {% else %}
-          <a class="nav-item nav-link" href="/admin">Login</a>
+          <a class="nav-item nav-link" href="/slack/login">Login</a>
         {% endif %}
         </ul>
       </div>

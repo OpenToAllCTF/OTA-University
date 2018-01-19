@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('ctf_framework.urls')),
     path('admin/', admin.site.urls, name="admin"),
+    path('slack/', include('django_slack_oauth.urls')),
 ]

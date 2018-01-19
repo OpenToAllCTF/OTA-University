@@ -9,5 +9,5 @@ urlpatterns = [
     path('', home, name="home"),
     path('profile/<int:user_id>/', profile, name="profile"),
     path('challenge/<int:challenge_id>/', challenge, name="challenge"),
-    path("logout/", logout, name="logout")
+    path("logout/", logout, name="logout"),
 ]

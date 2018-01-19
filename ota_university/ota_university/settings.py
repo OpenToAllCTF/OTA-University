@@ -20,12 +20,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#*cr!sm9%#2w#lzo^^7*fm*o!f)l7jaw%140o*06x_ag9=fvui'
+SECRET_KEY = 'CHANGE_ME'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+# Slack Authentication
+SLACK_CLIENT_ID = ''
+SLACK_CLIENT_SECRET = ''
+SLACK_SCOPE = 'users:read, users.profile:read'
+SLACK_SUCCESS_REDIRECT_URL = "/"
+
+SLACK_PIPELINES = [
+    'ctf_framework.pipelines.login_user',
+]
 
 
 # Application definition
@@ -37,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ctf_framework'
+    'ctf_framework',
+    'django_slack_oauth'
 ]
 
 MIDDLEWARE = [
