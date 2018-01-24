@@ -17,7 +17,7 @@ def home(request):
         "challenges": challenges
     }
 
-    return render(request, "home.html", context=context)
+    return render(request, "misc/home.html", context=context)
 
 
 def profile(request, user_id=None):
@@ -26,7 +26,7 @@ def profile(request, user_id=None):
         "user": user,
         "completed_challenges": user.get_completed_challenges()
     }
-    return render(request, "profile.html", context)
+    return render(request, "profile/show.html", context)
 
 
 def challenge(request, challenge_id):
@@ -37,10 +37,10 @@ def challenge(request, challenge_id):
         flag = request.POST["flag"]
         try:
             # Check for matching challenge with this flag
-            challenge = Challenge.objects.get(id=challenge_id, flag=flag)
+            _challenge = Challenge.objects.get(id=challenge_id, flag=flag)
 
             # Add this challenge to user's completed challenges
-            user.challenges.add(challenge)
+            user.challenges.add(_challenge)
             user.save()
             message = "Correct!"
 
@@ -56,7 +56,7 @@ def challenge(request, challenge_id):
         "message": message
     }
 
-    return render(request, "challenge.html", context)
+    return render(request, "challenge/show.html", context)
 
 
 def logout(request):

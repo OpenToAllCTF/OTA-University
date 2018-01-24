@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import yaml
+
+try:
+    config = yaml.load(open("ota_university/config.yaml").read())
+except FileNotFoundError:
+    exit("ota_university/config.yaml Not Found (use ota_univerisity/config.yaml.template)")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,23 +26,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'CHANGE_ME'
+SECRET_KEY = config["django"]["secret_key"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config["django"]["allowed_hosts"]
+
 
 # Slack Authentication
-SLACK_CLIENT_ID = ''
-SLACK_CLIENT_SECRET = ''
+SLACK_CLIENT_ID = config["slack_oauth"]["slack_client_id"]
+SLACK_CLIENT_SECRET = config["slack_oauth"]["slack_client_secret"]
 SLACK_SCOPE = 'users:read, users.profile:read'
 SLACK_SUCCESS_REDIRECT_URL = "/"
 
 SLACK_PIPELINES = [
     'ctf_framework.pipelines.login_user',
 ]
-
 
 # Application definition
 
