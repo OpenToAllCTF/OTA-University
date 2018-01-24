@@ -11,3 +11,6 @@ db.sqlite3
 
 # Django Migrations
 ota_university/ctf_framework/migrations/
+
+# Config
+*.yaml
