@@ -1,6 +1,7 @@
 django:
   secret_key: ""
   allowed_hosts: []
+  debug: bool
 
 slack_oauth:
   slack_client_id: ""

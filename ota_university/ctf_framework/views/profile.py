@@ -3,6 +3,7 @@ from .base_view import *
 
 def show(request, user_id):
     """View a page for a single profile."""
+
     user = UserProfile.objects.get(id=user_id)
     context = {
         "user": user,
@@ -13,6 +14,7 @@ def show(request, user_id):
 
 def logout(request):
     """ Logout user. """
+
     django_logout(request)
     return redirect("ctf_framework:home#index")
 

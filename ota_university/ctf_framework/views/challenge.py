@@ -4,13 +4,15 @@ from .base_view import *
 
 @login_required()
 def index(request):
+    """List all active challenges."""
+
     user = UserProfile.objects.get(user=request.user)
-    challenges = Challenge.objects.all()
+    challenges = Challenge.objects.filter(is_active=True)
 
     challenge_context = []
 
     for challenge in challenges:
-        challenge_context.append({"challenge": challenge, "completed": challenge in user.challenges.all()})
+        challenge_context.append({"challenge": challenge, "is_completed": challenge in user.completed_challenges.all()})
 
     context = {
         "challenges": challenge_context
@@ -19,17 +21,16 @@ def index(request):
 
 
 @login_required()
-def show(request, challenge_id):
+def show(request, challenge_id, message=None):
     """View the page of a specific challenge."""
-    user = UserProfile.objects.get(user=request.user)
-    message = None
 
+    user = UserProfile.objects.get(user=request.user)
     challenge = Challenge.objects.get(id=challenge_id)
 
     context = {
         "challenge": challenge,
         "user": user,
-        "challenge_completed": challenge in user.challenges.all(),
+        "challenge_completed": challenge in user.completed_challenges.all(),
         "message": message
     }
 
@@ -40,31 +41,21 @@ def show(request, challenge_id):
 def submit(request, challenge_id):
     """Submit a flag for a given challenge."""
 
-    user = UserProfile.objects.get(user=request.user)
-    message = None
-
-    challenge = Challenge.objects.get(id=challenge_id)
-
     if request.method == "POST":
+        user = UserProfile.objects.get(user=request.user)
         flag = request.POST["flag"]
+
         try:
-            # Check for matching challenge with this flag
+            # Check for matching challenge with this flag/
             challenge = Challenge.objects.get(id=challenge_id, flag=flag)
 
-            # Add this challenge to user's completed challenges
-            user.challenges.add(challenge)
+            # Add this challenge to user's completed challenges/
+            user.completed_challenges.add(challenge)
             user.save()
             message = "Correct!"
 
         except ObjectDoesNotExist:
             message = "Incorrect!"
 
-    context = {
-        "challenge": challenge,
-        "user": user,
-        "challenge_completed": challenge in user.challenges.all(),
-        "message": message
-    }
-
-    return render(request, "challenge/show.html", context)
-
+        # Return the show view with a response message.
+        return show(request, challenge_id, message)

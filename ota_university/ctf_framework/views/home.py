@@ -2,6 +2,8 @@ from .base_view import *
 
 
 def index(request):
+    """View the home page."""
+
     users = UserProfile.objects.all()
     challenges = Challenge.objects.all()
 
@@ -14,5 +16,3 @@ def index(request):
     }
 
     return render(request, "misc/home.html", context=context)
-
-

@@ -5,16 +5,14 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class CTFSlackUser(SlackUser):
-    """
-    Extending the django oauth SlackUser to support display names
-    """
+    """Extending the django oAuth SlackUser to support display names."""
+
     display_name = models.CharField(max_length=100)
 
 
 class Title(models.Model):
-    """
-    Awardable User Titles
-    """
+    """Titles that can be awarded to users."""
+
     title = models.CharField(max_length=30)
 
     def __str__(self):
@@ -23,13 +21,9 @@ class Title(models.Model):
 
 class ChallengeCategory(models.Model):
     """
-    CTF Challenge Categories that can be dynamically added
-    Objects cannot be deleted if a Challenge references them
+    CTF challenge categories that can be dynamically added.
+    Objects cannot be deleted if a challenge object references them.
     """
-
-    class Meta:
-        # For Displaying in Admin Panel
-        verbose_name = "Challenge Categorie"
 
     category = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
@@ -39,15 +33,13 @@ class ChallengeCategory(models.Model):
 
 
 class Challenge(models.Model):
-    """
-    CTF Challenges
-    """
+    """CTF challenges"""
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     flag = models.CharField(max_length=100)
     point_value = models.IntegerField(default=0)
-    active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
     url = models.CharField(max_length=100)
 
@@ -56,9 +48,8 @@ class Challenge(models.Model):
 
 
 class UserProfile(models.Model):
-    """
-    Used for storing all user profile information and statistics
-    """
+    """Used for storing all user profile information and statistics."""
+
     # Django User. Related Name is for retrieving UserProfile in templates (ex: request.user.UserProfile)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="UserProfile")
 
@@ -69,43 +60,29 @@ class UserProfile(models.Model):
     active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True, null=True)
 
     # Completed Challenges
-    challenges = models.ManyToManyField(Challenge, blank=True)
+    completed_challenges = models.ManyToManyField(Challenge, blank=True)
 
     def __str__(self):
         return self.display_name()
 
     def get_score(self):
-        return sum([c.point_value for c in self.challenges.all()])
+        return sum([c.point_value for c in self.completed_challenges.all()])
 
     def get_completed_challenges(self):
-        """
-        Returns a dictionary of {str ChallengeCategory: [completed challenge,],}
-        """
+        """Returns a dictionary of {str ChallengeCategory: [completed challenge,],}."""
+
         completed_challenges = {}
 
-        for category in ChallengeCategory.objects.all():
-            completed_challenges[category.category] = []
-            for challenge in self.challenges.filter(category=category):
-                completed_challenges[category.category].append(challenge)
-
+        for challenge in self.completed_challenges.all():
+            tmp = completed_challenges.get(challenge.category, [])
+            tmp.append(challenge)
+            completed_challenges[challenge.category] = tmp
         return completed_challenges
 
     def display_name(self):
-        """
-        If there's a slack user, return Slack display name. Else, use django username.
-        """
+        """If there's a Slack user, return Slack display name. Else, use django username."""
+
         try:
             return CTFSlackUser.objects.get(slacker=self.user).display_name
         except ObjectDoesNotExist:
             return self.user.username
-
-
-
-
-
-
-
-
-
-
-
