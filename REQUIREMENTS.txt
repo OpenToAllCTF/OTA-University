@@ -5,5 +5,6 @@ django-slack-oauth==1.4.3
 idna==2.6
 jsonfield==2.0.2
 pytz==2017.3
+PyYAML==3.12
 requests==2.18.4
 urllib3==1.22
