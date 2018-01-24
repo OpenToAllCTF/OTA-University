@@ -1,0 +1,8 @@
+django:
+  secret_key: ""
+  allowed_hosts: []
+
+slack_oauth:
+  slack_client_id: ""
+  slack_client_secret: ""
+
