@@ -1,4 +1,6 @@
 from .base_view import *
+
+
 def show(request, user_id):
     """View a page for a single profile."""
     user = UserProfile.objects.get(id=user_id)
@@ -7,6 +9,7 @@ def show(request, user_id):
         "completed_challenges": user.get_completed_challenges()
     }
     return render(request, "profile/show.html", context)
+
 
 def logout(request):
     """ Logout user. """

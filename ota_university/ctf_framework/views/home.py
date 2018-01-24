@@ -1,10 +1,15 @@
 from .base_view import *
+
+
 def index(request):
     users = UserProfile.objects.all()
     challenges = Challenge.objects.all()
 
+    # Order users by score
+    sorted_users = sorted(users, key=lambda u: -u.get_score())
+
     context = {
-        "users": users,
+        "users": sorted_users,
         "challenges": challenges
     }
 

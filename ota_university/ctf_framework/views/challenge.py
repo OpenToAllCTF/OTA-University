@@ -1,5 +1,24 @@
+from django.contrib.auth.decorators import login_required
 from .base_view import *
 
+
+@login_required()
+def index(request):
+    user = UserProfile.objects.get(user=request.user)
+    challenges = Challenge.objects.all()
+
+    challenge_context = []
+
+    for challenge in challenges:
+        challenge_context.append({"challenge": challenge, "completed": challenge in user.challenges.all()})
+
+    context = {
+        "challenges": challenge_context
+    }
+    return render(request, "challenge/index.html", context)
+
+
+@login_required()
 def show(request, challenge_id):
     """View the page of a specific challenge."""
     user = UserProfile.objects.get(user=request.user)
@@ -16,6 +35,8 @@ def show(request, challenge_id):
 
     return render(request, "challenge/show.html", context)
 
+
+@login_required()
 def submit(request, challenge_id):
     """Submit a flag for a given challenge."""
 

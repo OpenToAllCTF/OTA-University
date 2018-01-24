@@ -44,6 +44,8 @@ SLACK_PIPELINES = [
     'ctf_framework.pipelines.login_user',
 ]
 
+LOGIN_URL = "/slack/login"
+
 # Application definition
 
 INSTALLED_APPS = [

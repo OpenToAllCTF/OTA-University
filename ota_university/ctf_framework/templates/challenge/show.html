@@ -1,25 +1,26 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
-{% if message %}
-    {{ message }}<br><br><br>
-{% endif %}
+    {% if message %}
+        {{ message }}<br><br><br>
+    {% endif %}
 
-Challenge: {{ challenge.name }}<br>
-Category: {{ challenge.category }}<br>
-Description: {{ challenge.description }}<br>
-Value: {{ challenge.point_value }}<br>
-Status:
-{% if challenge_completed %}
-    Completed
-{% else %}
-    Incomplete<br><br>
-    <form action="{% url 'ctf_framework:challenge#submit' challenge.id %}" method="POST">
-    {% csrf_token %}
-        <label>Flag:
-            <input type="text" name="flag">
-        </label>
-    <input type="submit" value="Submit">
-    </form>
-{% endif %}
+    Challenge: {{ challenge.name }}<br>
+    Category: {{ challenge.category }}<br>
+    Description: {{ challenge.description }}<br>
+    Value: {{ challenge.point_value }}<br>
+    URL: <a href="{{ challenge.url }}">{{ challenge.url }}</a><br>
+    Status:
+    {% if challenge_completed %}
+        Completed
+    {% else %}
+        Incomplete<br><br>
+        <form action="{% url 'ctf_framework:challenge#submit' challenge.id %}" method="POST">
+            {% csrf_token %}
+            <label>Flag:
+                <input type="text" name="flag">
+            </label>
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
 
 {% endblock %}

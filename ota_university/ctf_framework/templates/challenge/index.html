@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+        {% for challenge in challenges %}
+            {% if challenge.completed %}
+            <s>
+            {% endif %}
+            <a href="{% url "ctf_framework:challenge#show" challenge.challenge.id %}">{{ challenge.challenge }}</a><br>
+            {% if challenge.completed %}
+            </s>
+            {% endif %}
+        {% endfor %}
+        <br><br>
+{% endblock %}

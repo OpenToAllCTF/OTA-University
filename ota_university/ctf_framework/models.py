@@ -49,6 +49,7 @@ class Challenge(models.Model):
     point_value = models.IntegerField(default=0)
     active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
+    url = models.CharField(max_length=100)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
