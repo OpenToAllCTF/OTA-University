@@ -16,7 +16,7 @@ import yaml
 try:
     config = yaml.load(open("ota_university/config.yaml").read())
 except FileNotFoundError:
-    exit("ota_university/config.yaml Not Found (use ota_univerisity/config.yaml.template)")
+    exit("ota_university/config.yaml Not Found (use ota_university/config.yaml.template)")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'ota_university.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'ota_university/../db.sqlite3'),
     }
 }
 
