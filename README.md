@@ -28,6 +28,6 @@ https://api.slack.com/slack-apps
 - Under Scopes add: user.profile:read
 - Select "Basic Information" on left
 - Install Your App To Your Workspace (OTA)
-- Add Client ID and Client Secret to settings.py
+- Add Client ID and Client Secret to config.yaml
 
 
