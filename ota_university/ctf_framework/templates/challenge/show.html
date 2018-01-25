@@ -4,6 +4,16 @@
         {{ message }}<br><br><br>
     {% endif %}
 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    {% endif %}
+
+
     Challenge: {{ challenge.name }}<br>
     Category: {{ challenge.category }}<br>
     Description: {{ challenge.description }}<br>
@@ -14,6 +24,7 @@
         Completed
     {% else %}
         Incomplete<br><br>
+
         <form action="{% url 'ctf_framework:challenge#submit' challenge.id %}" method="POST">
             {% csrf_token %}
             <label>Flag:
@@ -21,6 +32,7 @@
             </label>
             <input type="submit" value="Submit">
         </form>
+
     {% endif %}
 
 {% endblock %}

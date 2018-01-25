@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .base_view import *
+from django.urls import reverse
 
 
 @login_required()
@@ -21,7 +23,7 @@ def index(request):
 
 
 @login_required()
-def show(request, challenge_id, message=None):
+def show(request, challenge_id):
     """View the page of a specific challenge."""
 
     user = UserProfile.objects.get(user=request.user)
@@ -31,7 +33,6 @@ def show(request, challenge_id, message=None):
         "challenge": challenge,
         "user": user,
         "challenge_completed": challenge in user.completed_challenges.all(),
-        "message": message
     }
 
     return render(request, "challenge/show.html", context)
@@ -52,10 +53,10 @@ def submit(request, challenge_id):
             # Add this challenge to user's completed challenges/
             user.completed_challenges.add(challenge)
             user.save()
-            message = "Correct!"
+            messages.success(request, "Correct!")
 
         except ObjectDoesNotExist:
-            message = "Incorrect!"
+            messages.warning(request, "Incorrect!")
 
-        # Return the show view with a response message.
-        return show(request, challenge_id, message)
+        # Redirect to challenge#show
+        return redirect(reverse("ctf_framework:challenge#show", args=[challenge_id]))
