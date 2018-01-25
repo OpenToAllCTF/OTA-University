@@ -1,0 +1,23 @@
+{% extends "../layouts/base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="table-responsive users-table">
+        <h4>Leaderboard</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Users</th>
+                    <th>Score</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
+                        </td>
+                        <td>{{ user.get_score }}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

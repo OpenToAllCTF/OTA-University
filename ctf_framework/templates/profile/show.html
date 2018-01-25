@@ -1,0 +1,17 @@
+{% extends "../layouts/base.html" %}
+{% block content %}
+
+User: {{ user }}<br>
+Title: {{ user.active_title }}<br>
+Score: {{ user.get_score }}<br>
+<br>
+<u>Completed Challenges</u><br>
+{% for category, challenges in completed_challenges.items %}
+    <b>{{ category }}</b><br>
+    {% for challenge in challenges %}
+        {{ challenge }}<br>
+    {% endfor %}
+<br><br>
+
+{% endfor %}
+{% endblock %}
