@@ -1,13 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django_slack_oauth.models import SlackUser
-from django.core.exceptions import ObjectDoesNotExist
-
-
-class CTFSlackUser(SlackUser):
-    """Extending the django oAuth SlackUser to support display names."""
-
-    display_name = models.CharField(max_length=100)
 
 
 class Title(models.Model):
@@ -62,8 +54,10 @@ class UserProfile(models.Model):
     # Completed Challenges
     completed_challenges = models.ManyToManyField(Challenge, blank=True)
 
+    display_name = models.CharField(max_length=100, default="NOT_AVAILABLE")
+
     def __str__(self):
-        return self.display_name()
+        return self.display_name
 
     def get_score(self):
         return sum([c.point_value for c in self.completed_challenges.all()])
@@ -78,11 +72,3 @@ class UserProfile(models.Model):
             tmp.append(challenge)
             completed_challenges[challenge.category] = tmp
         return completed_challenges
-
-    def display_name(self):
-        """If there's a Slack user, return Slack display name. Else, use django username."""
-
-        try:
-            return CTFSlackUser.objects.get(slacker=self.user).display_name
-        except ObjectDoesNotExist:
-            return self.user.username
