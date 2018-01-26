@@ -1,33 +1,29 @@
-To get running:
+# OTA University
 
-- Install dependencies
-- cd ota_university/
+OTA University is a training ground for OTA members.
+Members register via their Slack account and participate in
+solving and creating challenges for the OTA community.
 
-For Empty Database:
-- python manage.py makemigrations
-- python manage.py makemigrations ctf_framework
-- python manage.py migrate
-- python manage.py runserver
+Based on the amount of _currently active_ challenges solved,
+members gain points and ranks.
 
-or drop a pre-made "db.sqlite3" into ota_university/
+# Requirements
+The web application runs on Python3 and uses Slack as an
+authentication service.
 
+To use OTA-University on your Slack, you'll need to create a
+Slack Application and fetch its `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET`.
+More information [here](https://api.slack.com/applications).
 
+# Deployment
+- `git clone https://github.com/OpenToAllCTF/OTA-University`
+- `cd OTA-University`
+- `pip3 intall -r REQUIREMENTS.txt`
+- `cp ota_university/config.yaml.template ota_university/config.yaml`
+- Fill in the settings in ota_university/config.yml
+- `python3 manage.py migrate`
+- `python3 manage.py runserver`
 
-To create new admin accounts:
-python manage.py createsuperuser
-
-#Slack oAuth
-Using https://github.com/izdi/django-slack-oauth
-
-https://api.slack.com/slack-apps
-- Create a Slack app
-- Name it OTA University or something similar
-- Set Workspace to OTA
-- Click Permissions
-- Add Redirect URL of {URL}/slack/login
-- Under Scopes add: user.profile:read
-- Select "Basic Information" on left
-- Install Your App To Your Workspace (OTA)
-- Add Client ID and Client Secret to config.yaml
-
-
+# Creating an Administrator Account
+To create new admin accounts, use the following command :
+`python3 manage.py createsuperuser`
