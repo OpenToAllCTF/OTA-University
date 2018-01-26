@@ -32,6 +32,6 @@ def login_user(request, api_data):
             profile.display_name = display_name
             profile.save()
 
-        login(request, user)
+            login(request, user)
 
     return request, api_data
