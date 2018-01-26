@@ -18,7 +18,7 @@ More information [here](https://api.slack.com/applications).
 # Deployment
 - `git clone https://github.com/OpenToAllCTF/OTA-University`
 - `cd OTA-University`
-- `pip3 intall -r REQUIREMENTS.txt`
+- `pip3 install -r REQUIREMENTS.txt`
 - `cp ota_university/config.yaml.template ota_university/config.yaml`
 - Fill in the settings in ota_university/config.yml
 - `python3 manage.py migrate`
@@ -27,3 +27,5 @@ More information [here](https://api.slack.com/applications).
 # Creating an Administrator Account
 To create new admin accounts, use the following command :
 `python3 manage.py createsuperuser`
+
+Visit `{URL}/admin` to login with the new account.
