@@ -9,8 +9,5 @@ ENV/
 # Database
 db.sqlite3
 
-# Django Migrations
-ctf_framework/migrations/
-
 # Config
 *.yaml
