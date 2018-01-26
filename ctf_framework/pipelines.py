@@ -1,9 +1,7 @@
 from slackclient import SlackClient
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-from .models import CTFSlackUser
 from .models import UserProfile
-
 
 
 def login_user(request, api_data):
@@ -25,19 +23,13 @@ def login_user(request, api_data):
 
         # Create a guaranteed unique and static django username from slack Team ID and User ID
         user, created = User.objects.get_or_create(
-            username="{}:{}".format(api_data['team_id'], api_data['user_id'])
+            username="SLACK:{}:{}".format(api_data['team_id'], api_data['user_id'])
         )
 
         if user.is_active:
-            slacker, _ = CTFSlackUser.objects.get_or_create(slacker=user)
-            slacker.access_token = api_data.pop('access_token')
-            slacker.extras = api_data
-            slacker.display_name = display_name
-            slacker.save()
-
-        if created:
-            request.created_user = user
-            profile = UserProfile(user=user)
+            # Update or create UserProfile and update display_name
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.display_name = display_name
             profile.save()
 
         login(request, user)
