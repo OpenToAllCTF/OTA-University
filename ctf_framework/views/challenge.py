@@ -18,7 +18,7 @@ def index(request):
         challenge_list = categories.get(category, [])
         challenge_list.append({
             "challenge" : challenge,
-            "is_completed" : True # challenge in user.challenges
+            "is_completed" : len(challenge.name) %2 == 0 # challenge in user.challenges
         })
         categories[category] = challenge_list
 
