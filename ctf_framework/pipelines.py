@@ -23,7 +23,7 @@ def login_user(request, api_data):
 
         # Create a guaranteed unique and static django username from slack Team ID and User ID
         user, created = User.objects.get_or_create(
-            username="SLACK:{}:{}".format(api_data['team_id'], api_data['user_id'])
+            username="{}:{}".format(api_data['team_id'], api_data['user_id'])
         )
 
         if user.is_active:
