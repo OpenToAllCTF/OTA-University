@@ -8,7 +8,7 @@ from django.urls import reverse
 def index(request):
     """List all active challenges."""
 
-    # user = UserProfile.objects.get(user=request.user)
+    user = UserProfile.objects.get(user=request.user)
     challenges = Challenge.objects.filter(is_active=True)
 
     categories = {}
@@ -18,7 +18,7 @@ def index(request):
         challenge_list = categories.get(category, [])
         challenge_list.append({
             "challenge" : challenge,
-            "is_completed" : len(challenge.name) %2 == 0 # challenge in user.challenges
+            "is_completed" : challenge in user.challenges
         })
         categories[category] = challenge_list
 
