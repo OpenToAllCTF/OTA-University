@@ -17,4 +17,10 @@ urlpatterns = [
     path('challenges/', challenge.index, name="challenge#index"),
     path('challenge/submit', challenge.submit, name="challenge#submit"),
 
+    # Writeups
+    path('challenge/<int:challenge_id>/writeups', writeup.index, name="writeup#index"),
+    path('writeups/submit', writeup.submit, name="writeup#submit"),
+    path('writeup/<int:writeup_id>', writeup.show, name="writeup#show"),
+    path('writeup/<int:writeup_id>/edit', writeup.edit, name="writeup#edit"),
+
 ]

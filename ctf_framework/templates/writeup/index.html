@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <div class="container">
+
+        <h1>Writeups for <small>{{challenge}}</small></h1>
+        <hr>
+        {% for writeup in writeups %}
+            <a href="{% url "ctf_framework:writeup#show" writeup.id%}">{{ writeup }}</a><br>
+        {% empty %}
+            No writeups
+        {% endfor %}
+        <hr>
+        {% if writeup %}
+            <form action="{% url 'ctf_framework:writeup#edit' writeup.id %}" method="POST">
+                {% csrf_token %}
+                Edit your writeup:
+                <textarea name="markdown">{{writeup.markdown}}</textarea><br>
+                <input class="btn btn-success" type="submit" value="Submit">
+            </form>
+        {% else %}
+            <form action="{% url 'ctf_framework:writeup#submit' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="challenge" value="{{ challenge.id }}">
+                Submit your writeup:
+                <textarea id="" name="markdown"></textarea>
+                <input class="btn btn-success" type="submit" value="Submit">
+            </form>
+        {% endif %}
+
+        <br><br>
+    </div>
+    <script>
+        new SimpleMDE({
+            spellChecker: false,
+            placeholder: "Use Markdown for your **writeup**:\n\n```python\nfrom pwn import *\n\ndef exploit():\n  pass\n```"
+        });
+    </script>
+{% endblock %}
