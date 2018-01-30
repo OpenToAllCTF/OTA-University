@@ -1,0 +1,12 @@
+{% extends "../layouts/base.html" %}
+{% block content %}
+
+<div class="container">
+    <a href="{% url "ctf_framework:writeup#index" writeup.challenge.id %}">{{ writeup.challenge }}</a><br>
+    <hr>
+    {{ writeup }}
+    <hr>
+    <div id="markdown">{{html}}</div>
+</div>
+
+{% endblock %}
