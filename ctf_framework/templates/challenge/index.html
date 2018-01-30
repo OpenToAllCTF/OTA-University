@@ -1,14 +1,27 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-
+  <div class="container">
+    {% for category, challenges in categories.items %}
+      <h2>{{ category.category }}</h2>
+      <hr>
+      <div class="row">
         {% for challenge in challenges %}
-            {% if challenge.is_completed %}
-            <s>
-            {% endif %}
-            <a href="{% url "ctf_framework:challenge#show" challenge.challenge.id %}">{{ challenge.challenge }}</a><br>
-            {% if challenge.is_completed %}
-            </s>
-            {% endif %}
+          <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+            <div class="card">
+              {% if challenge.is_completed %}
+              <div class="card-body bg-success text-white">
+              {% else %}
+              <div class="card-body">
+              {% endif %}
+                <h4 class="card-title">{{ challenge.challenge.name }}</h4>
+                <h5 class="card-subtitle mb-2">{{ challenge.challenge.point_value }} points</h5>
+                <p class="card-text">{{ challenge.challenge.description }}</p>
+              </div>
+            </div>
+          </div>
         {% endfor %}
-        <br><br>
+      </div>
+      <br>
+    {% endfor %}
+  </div>
 {% endblock %}

@@ -11,14 +11,18 @@ def index(request):
     user = UserProfile.objects.get(user=request.user)
     challenges = Challenge.objects.filter(is_active=True)
 
-    challenge_context = []
+    categories = {}
 
     for challenge in challenges:
-        challenge_context.append({"challenge": challenge, "is_completed": challenge in user.completed_challenges.all()})
+        category = challenge.category
+        challenge_list = categories.get(category, [])
+        challenge_list.append({
+            "challenge" : challenge,
+            "is_completed" : challenge in user.challenges
+        })
+        categories[category] = challenge_list
 
-    context = {
-        "challenges": challenge_context
-    }
+    context = { "categories": categories }
     return render(request, "challenge/index.html", context)
 
 
