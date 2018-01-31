@@ -25,23 +25,6 @@ def index(request):
     context = { "categories": categories }
     return render(request, "challenge/index.html", context)
 
-
-@login_required()
-def show(request, challenge_id):
-    """View the page of a specific challenge."""
-
-    user = UserProfile.objects.get(user=request.user)
-    challenge = Challenge.objects.get(id=challenge_id)
-
-    context = {
-        "challenge": challenge,
-        "user": user,
-        "challenge_completed": challenge in user.completed_challenges.all(),
-    }
-
-    return render(request, "challenge/show.html", context)
-
-
 @login_required()
 def submit(request):
     """Submit a flag for a given challenge."""

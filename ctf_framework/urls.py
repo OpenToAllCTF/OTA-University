@@ -15,7 +15,6 @@ urlpatterns = [
 
     # Challenge
     path('challenges/', challenge.index, name="challenge#index"),
-    path('challenge/<int:challenge_id>/', challenge.show, name="challenge#show"),
     path('challenge/submit', challenge.submit, name="challenge#submit"),
 
 ]
