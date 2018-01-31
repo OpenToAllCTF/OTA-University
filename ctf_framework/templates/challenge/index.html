@@ -1,6 +1,17 @@
 {% extends "layouts/base.html" %}
 {% block content %}
   <div class="container">
+    <div class="mb-5">
+      <form action="{% url 'ctf_framework:challenge#submit' %}" method="POST">
+        <div class="input-group">
+          <input name="flag" class="form-control" type="textfield">
+          <div class="input-group-append">
+            <input class="btn btn-success" type="submit" value="Submit Flag">
+          </div>
+          {% csrf_token %}
+        </div>
+      </form>
+    </div>
     {% for category, challenges in categories.items %}
       <h2>{{ category.category }}</h2>
       <hr>

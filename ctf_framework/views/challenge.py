@@ -18,7 +18,7 @@ def index(request):
         challenge_list = categories.get(category, [])
         challenge_list.append({
             "challenge" : challenge,
-            "is_completed" : challenge in user.challenges
+            "is_completed" : challenge in user.completed_challenges.all()
         })
         categories[category] = challenge_list
 
@@ -43,7 +43,7 @@ def show(request, challenge_id):
 
 
 @login_required()
-def submit(request, challenge_id):
+def submit(request):
     """Submit a flag for a given challenge."""
 
     if request.method == "POST":
@@ -51,10 +51,10 @@ def submit(request, challenge_id):
         flag = request.POST["flag"]
 
         try:
-            # Check for matching challenge with this flag/
-            challenge = Challenge.objects.get(id=challenge_id, flag=flag)
+            # Check for matching challenge with this flag
+            challenge = Challenge.objects.get(flag=flag)
 
-            # Add this challenge to user's completed challenges/
+            # Add this challenge to user's completed challenges
             user.completed_challenges.add(challenge)
             user.save()
             messages.success(request, "Correct!")
@@ -63,4 +63,4 @@ def submit(request, challenge_id):
             messages.warning(request, "Incorrect!")
 
         # Redirect to challenge#show
-        return redirect(reverse("ctf_framework:challenge#show", args=[challenge_id]))
+        return redirect(reverse("ctf_framework:challenge#index"))
