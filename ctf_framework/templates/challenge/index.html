@@ -27,6 +27,11 @@
                 <h4 class="card-title">{{ challenge.challenge.name }}</h4>
                 <h5 class="card-subtitle mb-2">{{ challenge.challenge.point_value }} points</h5>
                 <p class="card-text">{{ challenge.challenge.description }}</p>
+                {% if challenge.is_completed %}
+                <a class="btn btn-secondary btn-sm" href="{% url "ctf_framework:writeup#index" challenge.challenge.id %}" role="button">
+                  Writeups
+                </a>
+                {% endif %}
               </div>
             </div>
           </div>
