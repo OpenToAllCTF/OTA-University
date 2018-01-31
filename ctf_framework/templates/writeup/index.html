@@ -14,7 +14,7 @@
             <form action="{% url 'ctf_framework:writeup#edit' writeup.id %}" method="POST">
                 {% csrf_token %}
                 Edit your writeup:
-                <textarea name="markdown">{{writeup.markdown}}</textarea><br>
+                <textarea id="markdown" name="markdown">{{writeup.markdown}}</textarea><br>
                 <input class="btn btn-success" type="submit" value="Submit">
             </form>
         {% else %}
@@ -22,7 +22,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="challenge" value="{{ challenge.id }}">
                 Submit your writeup:
-                <textarea id="" name="markdown"></textarea>
+                <textarea id="markdown" name="markdown"></textarea>
                 <input class="btn btn-success" type="submit" value="Submit">
             </form>
         {% endif %}
@@ -31,6 +31,7 @@
     </div>
     <script>
         new SimpleMDE({
+            element: document.getElementById("markdown"),
             spellChecker: false,
             placeholder: "Use Markdown for your **writeup**:\n\n```python\nfrom pwn import *\n\ndef exploit():\n  pass\n```"
         });
