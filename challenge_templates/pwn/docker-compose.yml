@@ -4,7 +4,6 @@ services:
     build:
       context: .
     working_dir: /home/ctf
-    container_name: challenge_name
     ports:
       - "31337:31337" # exposed:local
     entrypoint: /etc/run_xinetd.sh
