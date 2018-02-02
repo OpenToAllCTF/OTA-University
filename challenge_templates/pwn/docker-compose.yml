@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ctf_name:
+    build:
+      context: .
+    working_dir: /home/ctf
+    container_name: challenge_name
+    ports:
+      - "31337:31337" # local:remote
+    entrypoint: /etc/run_xinetd.sh
