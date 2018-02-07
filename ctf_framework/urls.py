@@ -16,6 +16,10 @@ urlpatterns = [
     # Challenge
     path('challenges/', challenge.index, name="challenge#index"),
     path('challenge/submit', challenge.submit, name="challenge#submit"),
+    path('challenge/new', challenge.new, name="challenge#new"),
+    path('challenge/create', challenge.create, name="challenge#create"),
+    path('challenge/<int:challenge_id>/edit', challenge.edit, name="challenge#edit"),
+    path('challenge/<int:challenge_id>/update', challenge.update, name="challenge#update"),
 
     # Writeups
     path('challenge/<int:challenge_id>/writeups', writeup.index, name="writeup#index"),

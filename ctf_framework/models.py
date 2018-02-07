@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Title(models.Model):
     """Titles that can be awarded to users."""
 
@@ -32,7 +33,7 @@ class Challenge(models.Model):
     point_value = models.IntegerField(default=0)
     is_active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
-    url = models.CharField(max_length=100)
+    url = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
@@ -55,6 +56,8 @@ class UserProfile(models.Model):
 
     display_name = models.CharField(max_length=100, default="NOT_AVAILABLE")
 
+    is_admin = models.BooleanField(default=False)
+
     def __str__(self):
         return self.display_name
 
@@ -71,6 +74,7 @@ class UserProfile(models.Model):
             tmp.append(challenge)
             completed_challenges[challenge.category] = tmp
         return completed_challenges
+
 
 class Writeup(models.Model):
     """CTF writeups"""

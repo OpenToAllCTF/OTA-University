@@ -12,6 +12,9 @@
         </div>
       </form>
     </div>
+    {% if is_admin %}
+        <a href="{% url "ctf_framework:challenge#new" %}">Create Challenge</a>
+    {% endif %}
     {% for category, challenges in categories.items %}
       <h2>{{ category.category }}</h2>
       <hr>
@@ -32,6 +35,10 @@
                   Writeups
                 </a>
                 {% endif %}
+                {% if is_admin %}
+                    <a href="{% url "ctf_framework:challenge#edit" challenge.challenge.id %}">Edit</a>
+                {% endif %}
+
               </div>
             </div>
           </div>
@@ -40,4 +47,5 @@
       <br>
     {% endfor %}
   </div>
+
 {% endblock %}
