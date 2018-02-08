@@ -12,6 +12,8 @@ urlpatterns = [
     # Profile
     path('profile/<int:user_id>/', profile.show, name="profile#show"),
     path("profile/logout", profile.logout, name="profile#logout"),
+    path("profile/<int:user_id>/edit", profile.edit, name="profile#edit"),
+    path("profile/<int:user_id>/update", profile.update, name="profile#update"),
 
     # Challenge
     path('challenges/', challenge.index, name="challenge#index"),

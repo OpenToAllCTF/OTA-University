@@ -1,5 +1,8 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
+    {% if can_edit %}
+        <a href="{% url "ctf_framework:profile#edit" user.id %}">Edit</a><br><br>
+    {% endif %}
 
 User: {{ user }}<br>
 Title: {{ user.active_title }}<br>

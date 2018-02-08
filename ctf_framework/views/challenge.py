@@ -55,7 +55,7 @@ def submit(request):
 
 @login_required()
 def new(request):
-    """Create a new challenge"""
+    """Create a new challenge."""
 
     if not UserProfile.objects.get(user=request.user).is_admin:
         return HttpResponseForbidden()
@@ -69,7 +69,7 @@ def new(request):
 
 @login_required()
 def edit(request, challenge_id):
-    """Edit an existing challenge"""
+    """Edit an existing challenge."""
 
     if not UserProfile.objects.get(user=request.user).is_admin:
         return HttpResponseForbidden()
@@ -91,7 +91,7 @@ def edit(request, challenge_id):
 
 @login_required()
 def create(request):
-    """Save new challenge"""
+    """Save new challenge."""
 
     if not UserProfile.objects.get(user=request.user).is_admin:
         return HttpResponseForbidden()
@@ -108,7 +108,7 @@ def create(request):
 
 @login_required()
 def update(request, challenge_id):
-    """Update existing challenge"""
+    """Update existing challenge."""
 
     if not UserProfile.objects.get(user=request.user).is_admin:
         return HttpResponseForbidden()
