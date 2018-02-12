@@ -10,4 +10,4 @@ ENV/
 db.sqlite3
 
 # Config
-*.yaml
+config.yaml
