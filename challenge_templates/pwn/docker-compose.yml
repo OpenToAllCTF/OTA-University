@@ -7,3 +7,4 @@ services:
     ports:
       - "31337:31337" # exposed:local
     entrypoint: /etc/run_xinetd.sh
+    read_only: true
