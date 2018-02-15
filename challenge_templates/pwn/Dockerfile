@@ -22,7 +22,7 @@ ADD challenge/flag /flag
 ADD challenge/challenge /home/ctf/challenge
 
 # Set some proper permissions
-RUN chown -R root:ctf /home/ctf
+RUN chown -R root:ctf /home/ctf /flag
 RUN chmod 750 /home/ctf/challenge
 RUN chmod 750 /home/ctf/run_challenge.sh
 RUN chmod 440 /flag
