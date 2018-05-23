@@ -12,10 +12,30 @@ urlpatterns = [
     # Profile
     path('profile/<int:user_id>/', profile.show, name="profile#show"),
     path("profile/logout", profile.logout, name="profile#logout"),
+    path("profile/<int:user_id>/edit", profile.edit, name="profile#edit"),
+    path("profile/<int:user_id>/update", profile.update, name="profile#update"),
 
     # Challenge
     path('challenges/', challenge.index, name="challenge#index"),
     path('challenge/submit', challenge.submit, name="challenge#submit"),
+    path('challenge/new', challenge.new, name="challenge#new"),
+    path('challenge/create', challenge.create, name="challenge#create"),
+    path('challenge/<int:challenge_id>/edit', challenge.edit, name="challenge#edit"),
+    path('challenge/<int:challenge_id>/update', challenge.update, name="challenge#update"),
+
+    # Category
+    path('categories/', category.index, name="category#index"),
+    path('category/new', category.new, name="category#new"),
+    path('category/create', category.create, name="category#create"),
+    path('category/<int:category_id>/edit', category.edit , name="category#edit"),
+    path('category/<int:category_id>/update', category.update, name="category#update"),
+
+    # Title
+    path('titles/', title.index, name="title#index"),
+    path('title/new', title.new, name="title#new"),
+    path('title/create', title.create, name="title#create"),
+    path('title/<int:title_id>/edit', title.edit, name="title#edit"),
+    path('title/<int:title_id>/update', title.update, name="title#update"),
 
     # Writeups
     path('challenge/<int:challenge_id>/writeups', writeup.index, name="writeup#index"),

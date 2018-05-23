@@ -1,0 +1,9 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <form action ="{% url "ctf_framework:challenge#create" %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit"/>
+    </form>
+
+{% endblock %}
