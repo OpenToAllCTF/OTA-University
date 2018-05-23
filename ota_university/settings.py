@@ -13,13 +13,15 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import yaml
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 try:
-    config = yaml.load(open("ota_university/config.yaml").read())
+    config = yaml.load(open(BASE_DIR + "/ota_university/config.yaml").read())
 except FileNotFoundError:
     exit("ota_university/config.yaml Not Found (use ota_university/config.yaml.template)")
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
