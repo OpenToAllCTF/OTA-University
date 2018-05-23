@@ -23,6 +23,20 @@ urlpatterns = [
     path('challenge/<int:challenge_id>/edit', challenge.edit, name="challenge#edit"),
     path('challenge/<int:challenge_id>/update', challenge.update, name="challenge#update"),
 
+    # Category
+    path('categories/', category.index, name="category#index"),
+    path('category/new', category.new, name="category#new"),
+    path('category/create', category.create, name="category#create"),
+    path('category/<int:category_id>/edit', category.edit , name="category#edit"),
+    path('category/<int:category_id>/update', category.update, name="category#update"),
+
+    # Title
+    path('titles/', title.index, name="title#index"),
+    path('title/new', title.new, name="title#new"),
+    path('title/create', title.create, name="title#create"),
+    path('title/<int:title_id>/edit', title.edit, name="title#edit"),
+    path('title/<int:title_id>/update', title.update, name="title#update"),
+
     # Writeups
     path('challenge/<int:challenge_id>/writeups', writeup.index, name="writeup#index"),
     path('writeups/submit', writeup.submit, name="writeup#submit"),

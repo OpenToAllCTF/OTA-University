@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+  <div class="container">
+
+        <a href="{% url "ctf_framework:title#new" %}">Create Title</a>
+      <br>
+      <br>
+
+        <ul>
+            {% for title in titles %}
+                <li><a href="{% url "ctf_framework:title#edit" title.id %}">{{ title }}</a></li>
+            {% endfor %}
+        </ul>
+  </div>
+
+{% endblock %}

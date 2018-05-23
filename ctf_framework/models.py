@@ -56,7 +56,9 @@ class UserProfile(models.Model):
 
     display_name = models.CharField(max_length=100, default="NOT_AVAILABLE")
 
-    is_admin = models.BooleanField(default=False)
+    @property
+    def is_staff(self):
+        return self.user.is_staff
 
     def __str__(self):
         return self.display_name

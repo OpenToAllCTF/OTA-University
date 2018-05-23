@@ -10,7 +10,7 @@ def index(request):
     """List all active challenges."""
 
     user = UserProfile.objects.get(user=request.user)
-    challenges = Challenge.objects.filter(is_active=True)
+    challenges = Challenge.objects.all()
 
     categories = {}
 
@@ -18,13 +18,12 @@ def index(request):
         category = challenge.category
         challenge_list = categories.get(category, [])
         challenge_list.append({
-            "challenge": challenge,
+            "info": challenge,
             "is_completed": challenge in user.completed_challenges.all(),
         })
         categories[category] = challenge_list
 
     context = {"categories": categories,
-               "is_admin": UserProfile.objects.get(user=request.user).is_admin
                }
     return render(request, "challenge/index.html", context)
 
@@ -57,7 +56,7 @@ def submit(request):
 def new(request):
     """Create a new challenge."""
 
-    if not UserProfile.objects.get(user=request.user).is_admin:
+    if not request.user.is_staff:
         return HttpResponseForbidden()
 
     context = {
@@ -71,7 +70,7 @@ def new(request):
 def edit(request, challenge_id):
     """Edit an existing challenge."""
 
-    if not UserProfile.objects.get(user=request.user).is_admin:
+    if not request.user.is_staff:
         return HttpResponseForbidden()
 
     try:
@@ -93,7 +92,7 @@ def edit(request, challenge_id):
 def create(request):
     """Save new challenge."""
 
-    if not UserProfile.objects.get(user=request.user).is_admin:
+    if not request.user.is_staff:
         return HttpResponseForbidden()
 
     if request.method not in "POST":
@@ -102,6 +101,7 @@ def create(request):
     form = ChallengeForm(request.POST)
     if form.is_valid():
         form.save()
+        messages.success(request, "Challenge Created!")
 
     return redirect("ctf_framework:challenge#index")
 
@@ -110,7 +110,7 @@ def create(request):
 def update(request, challenge_id):
     """Update existing challenge."""
 
-    if not UserProfile.objects.get(user=request.user).is_admin:
+    if not request.user.is_staff:
         return HttpResponseForbidden()
 
     if request.method not in "POST":
@@ -126,7 +126,7 @@ def update(request, challenge_id):
         form.save()
         messages.success(request, "Challenge Updated!")
 
-    return redirect("ctf_framework:challenge#edit", challenge_id)
+    return redirect("ctf_framework:challenge#index")
 
 
 

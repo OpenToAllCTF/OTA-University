@@ -11,7 +11,7 @@
                 {% for user in users %}
                     <tr>
                         <td>
-                            <a href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
+                            <a href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a> | {{ user.active_title }}
                         </td>
                         <td>{{ user.get_score }}</td>
                     </tr>

@@ -16,7 +16,7 @@ def show(request, user_id):
     context = {
         "user": user,
         "completed_challenges": user.get_completed_challenges(),
-        "can_edit": request_user_profile == user_profile or request_user_profile.is_admin
+        "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
     }
     return render(request, "profile/show.html", context)
 
@@ -37,10 +37,10 @@ def edit(request, user_id):
         return redirect("ctf_framework:home#index")
 
     # Verify user editing their own profile or they are an admin
-    if request_user_profile != user_profile and not request_user_profile.is_admin:
+    if request_user_profile != user_profile and not request_user_profile.is_staff:
         return HttpResponseForbidden()
 
-    if request_user_profile.is_admin:
+    if request_user_profile.is_staff:
         form = UserProfileAdminForm(instance=user_profile)
     else:
         form = UserProfileForm(instance=user_profile)
@@ -60,10 +60,10 @@ def update(request, user_id):
         return redirect("ctf_framework:home#index")
 
     # Verify user editing their own profile or they are an admin
-    if request_user_profile != user_profile and not request_user_profile.is_admin:
+    if request_user_profile != user_profile and not request_user_profile.is_staff:
         return HttpResponseForbidden()
 
-    if request_user_profile.is_admin:
+    if request_user_profile.is_staff:
         form = UserProfileAdminForm(request.POST, instance=user_profile)
     else:
         form = UserProfileForm(request.POST, instance=user_profile)
