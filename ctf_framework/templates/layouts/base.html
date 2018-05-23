@@ -62,15 +62,11 @@
         {% if request.user.is_authenticated %}
 
 
-          {% if request.user.is_staff %}
-            <a class="nav-item nav-link"
-               href="{% url 'admin:index' %}">{{ user }}</a>
-          {% else %}
             {% with request.user.UserProfile as user %}
               <a class="nav-item nav-link"
                 href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
             {% endwith %}
-          {% endif %}
+            
           <a class="nav-item nav-link"
              href="{% url 'ctf_framework:profile#logout' %}">Logout</a>
         {% else %}
