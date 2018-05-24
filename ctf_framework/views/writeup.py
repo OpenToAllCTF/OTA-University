@@ -31,7 +31,7 @@ def index(request, challenge_id):
 
     if challenge in user.completed_challenges.all():
         writeups = Writeup.objects.filter(challenge_id=challenge_id)
-        writeup = Writeup.objects.filter(user=user.user, challenge=challenge).first()
+        writeup = Writeup.objects.filter(user=user, challenge=challenge).first()
         context = {
             "challenge": challenge,
             "writeups": writeups,
@@ -75,7 +75,7 @@ def edit(request, writeup_id):
         writeup = Writeup.objects.get(id=writeup_id)
         challenge = Challenge.objects.get(id=writeup.challenge.id)
 
-        if user.user == writeup.user and challenge in user.completed_challenges.all():
+        if user == writeup.user and challenge in user.completed_challenges.all():
             writeup = Writeup.objects.get(id=writeup_id)
             writeup.markdown = request.POST["markdown"]
             writeup.save()
@@ -93,7 +93,7 @@ def submit(request):
         challenge = Challenge.objects.get(id=request.POST["challenge"])
 
         if challenge in user.completed_challenges.all():
-            writeup = Writeup.objects.create(user=user.user, challenge=challenge, markdown=request.POST["markdown"])
+            writeup = Writeup.objects.create(user=user, challenge=challenge, markdown=request.POST["markdown"])
             writeup.save()
 
             return redirect(reverse("ctf_framework:writeup#show", args=[writeup.id]))
