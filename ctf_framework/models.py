@@ -6,6 +6,7 @@ class Title(models.Model):
     """Titles that can be awarded to users."""
 
     title = models.CharField(max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -19,6 +20,7 @@ class ChallengeCategory(models.Model):
 
     category = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.category
@@ -34,6 +36,7 @@ class Challenge(models.Model):
     is_active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
     url = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
@@ -53,6 +56,9 @@ class UserProfile(models.Model):
 
     # Active Title, Can Be Set To Any (even non-earned) By Admin
     active_title = models.ForeignKey(Title, on_delete=models.PROTECT, related_name="activetitle", blank=True, null=True)
+
+    # Registration Time
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
 
     @property
@@ -80,11 +86,13 @@ class UserProfile(models.Model):
 class ChallengeSolve(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
+    solve_time = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class TitleGrant(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    grant_time = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class Writeup(models.Model):
@@ -93,6 +101,7 @@ class Writeup(models.Model):
     markdown = models.CharField(max_length=5000)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     class Meta:
         unique_together = ("user", "challenge")
