@@ -3,6 +3,7 @@ from django.contrib import messages
 from .base_view import *
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
+from ..models import ChallengeSolve
 
 
 @login_required()
@@ -41,8 +42,9 @@ def submit(request):
             challenge = Challenge.objects.get(flag=flag)
 
             # Add this challenge to user's completed challenges
-            user.completed_challenges.add(challenge)
-            user.save()
+            solve = ChallengeSolve(user=user, challenge=challenge)
+            solve.save()
+
             messages.success(request, "Correct!")
 
         except ObjectDoesNotExist:

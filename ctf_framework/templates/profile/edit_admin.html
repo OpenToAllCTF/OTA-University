@@ -1,0 +1,30 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+    <form action="{% url "ctf_framework:profile#update" user.id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit"/>
+    </form>
+    <br><br><br>
+    <h3>Earned Titles</h3>
+    <ul>
+        {% for title in user.earned_titles.all %}
+            <li>{{ title }} <a href="{% url "ctf_framework:profile#delete_title" user.id title.id %}"><img
+                    src="{% static "/img/remove.png" %}" style="width:15px; height: 15px; margin-bottom:5px;"/></a></li>
+        {% endfor %}
+    </ul>
+    <br>
+    <h3>Add Title</h3>
+    <form action="{% url "ctf_framework:profile#add_title" user.id %}" method="POST">
+    {% csrf_token %}
+        <select name="title">
+            {% for title in unearned_titles %}
+                <option value="{{ title.id }}">{{ title }}</option>
+            {% endfor %}
+        </select>
+    <input type="submit" value="submit"/>
+    </form>
+
+
+{% endblock %}

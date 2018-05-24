@@ -1,6 +1,7 @@
 from .base_view import *
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib import messages
+from ..models import TitleGrant
 
 
 def show(request, user_id):
@@ -44,10 +45,15 @@ def edit(request, user_id):
         form = UserProfileAdminForm(instance=user_profile)
     else:
         form = UserProfileForm(instance=user_profile)
+        form.fields["active_title"].queryset = user_profile.earned_titles
 
     context = {"form": form,
-               "user_id": user_id}
+               "user": user_profile}
 
+    if request.user.is_staff:
+        # Get all titles that the user doesn't currently have available
+        context["unearned_titles"] = Title.objects.filter().exclude(id__in=user_profile.earned_titles.all())
+        return render(request, "profile/edit_admin.html", context)
     return render(request, "profile/edit.html", context)
 
 
@@ -64,14 +70,69 @@ def update(request, user_id):
         return HttpResponseForbidden()
 
     if request_user_profile.is_staff:
-        form = UserProfileAdminForm(request.POST, instance=user_profile)
-    else:
-        form = UserProfileForm(request.POST, instance=user_profile)
+        # Staff can set anyone to any title
 
-    form.save()
-    messages.success(request, "Profile Updated!")
+        form = UserProfileAdminForm(request.POST, instance=user_profile)
+        form.save()
+        messages.success(request, "Profile Updated!")
+
+    else:
+        try:
+            requested_title_id = request.POST["active_title"]
+            requested_title = Title.objects.get(id=requested_title_id)
+
+        except ObjectDoesNotExist:
+            # Covers setting title to None and requesting invalid titles
+            user_profile.active_title = None
+            user_profile.save()
+            messages.success(request, "Profile Updated!")
+            return redirect("ctf_framework:profile#show", user_id)
+
+        if requested_title not in user_profile.earned_titles.all():
+            # Bad Title ID requested
+            messages.warning(request, "HAXOR!")
+
+        else:
+            form = UserProfileForm(request.POST, instance=user_profile)
+            form.save()
+            messages.success(request, "Profile Updated!")
 
     return redirect("ctf_framework:profile#show", user_id)
+
+
+def add_title(request, user_id):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+
+    try:
+        user_profile = UserProfile.objects.get(id=user_id)
+        title = Title.objects.get(id=request.POST["title"])
+    except ObjectDoesNotExist:
+        return redirect("ctf_framework:home#index")
+
+    # Create if doesn't exist
+    TitleGrant.objects.get_or_create(user=user_profile, title=title)
+
+    return redirect("ctf_framework:profile#edit", user_id)
+
+
+def delete_title(request, user_id, title_id):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+
+    try:
+        user_profile = UserProfile.objects.get(id=user_id)
+        title = Title.objects.get(id=title_id)
+    except ObjectDoesNotExist:
+        return redirect("ctf_framework:home#index")
+
+    try:
+        TitleGrant.objects.get(user=user_profile, title=title).delete()
+    except ObjectDoesNotExist:
+        pass
+
+    return redirect("ctf_framework:profile#edit", user_id)
+
 
 
 
