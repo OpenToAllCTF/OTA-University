@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-    <form action ="{% url "ctf_framework:profile#update" user_id %}" method="POST">
+    <form action ="{% url "ctf_framework:profile#update" user.id %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit"/>

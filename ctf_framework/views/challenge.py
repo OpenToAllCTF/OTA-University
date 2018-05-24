@@ -3,7 +3,9 @@ from django.contrib import messages
 from .base_view import *
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
+from ..models import ChallengeSolve
 
+from datetime import datetime
 
 @login_required()
 def index(request):
@@ -41,8 +43,12 @@ def submit(request):
             challenge = Challenge.objects.get(flag=flag)
 
             # Add this challenge to user's completed challenges
-            user.completed_challenges.add(challenge)
-            user.save()
+            solve, created = ChallengeSolve.objects.get_or_create(user=user, challenge=challenge)
+
+            if created:
+                user.last_solve_time = datetime.now()
+                user.save()
+
             messages.success(request, "Correct!")
 
         except ObjectDoesNotExist:

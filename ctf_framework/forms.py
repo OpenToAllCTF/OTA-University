@@ -20,7 +20,6 @@ class TitleForm(ModelForm):
         fields = ["title"]
 
 
-
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
@@ -30,4 +29,4 @@ class UserProfileForm(ModelForm):
 class UserProfileAdminForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ["titles", "active_title", "completed_challenges"]
+        fields = ["active_title"]
