@@ -9,8 +9,6 @@ def index(request):
 
     # Order users by score
     sorted_users = sorted(users, key=lambda u: -u.get_score())
-    sorted_users = sorted(sorted_users, key=lambda u: u.last_solve_time)
-
     context = {
         "users": sorted_users,
         "challenges": challenges
