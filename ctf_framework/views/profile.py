@@ -79,6 +79,8 @@ def update(request, user_id):
     else:
         try:
             requested_title_id = request.POST["active_title"]
+            if requested_title_id in "":
+                requested_title_id = 0
             requested_title = Title.objects.get(id=requested_title_id)
 
         except ObjectDoesNotExist:
