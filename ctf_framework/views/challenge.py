@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from ..models import ChallengeSolve
 
+from datetime import datetime
 
 @login_required()
 def index(request):
@@ -42,8 +43,11 @@ def submit(request):
             challenge = Challenge.objects.get(flag=flag)
 
             # Add this challenge to user's completed challenges
-            solve = ChallengeSolve(user=user, challenge=challenge)
-            solve.save()
+            solve, created = ChallengeSolve.objects.get_or_create(user=user, challenge=challenge)
+
+            if created:
+                user.last_solve_time = datetime.now()
+                user.save()
 
             messages.success(request, "Correct!")
 

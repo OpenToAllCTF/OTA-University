@@ -60,6 +60,9 @@ class UserProfile(models.Model):
     # Registration Time
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    # Used for sorting the scoreboard
+    last_solve_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
 
     @property
     def is_staff(self):
