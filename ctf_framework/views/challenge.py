@@ -7,6 +7,7 @@ from ..models import ChallengeSolve
 
 from datetime import datetime
 
+
 @login_required()
 def index(request):
     """List all active challenges."""
@@ -134,6 +135,27 @@ def update(request, challenge_id):
 
     return redirect("ctf_framework:challenge#index")
 
+
+@login_required()
+def delete(request, challenge_id):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+
+    if request.method in "GET":
+        try:
+            challenge = Challenge.objects.get(id=challenge_id)
+        except ObjectDoesNotExist:
+            return redirect("ctf_framework:challenge#index")
+
+        return render(request, "challenge/delete.html", {"challenge": challenge})
+
+    if request.method in "POST":
+        try:
+            Challenge.objects.get(id=challenge_id).delete()
+        except ObjectDoesNotExist:
+            pass
+
+    return redirect("ctf_framework:challenge#index")
 
 
 

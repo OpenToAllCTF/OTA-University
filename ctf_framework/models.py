@@ -30,7 +30,8 @@ class Challenge(models.Model):
     """CTF challenges"""
 
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    author = models.CharField(max_length=100)
+    description = models.TextField(max_length=1000)
     flag = models.CharField(max_length=100, unique=True)
     point_value = models.IntegerField(default=0)
     is_active = models.BooleanField(default=False)
