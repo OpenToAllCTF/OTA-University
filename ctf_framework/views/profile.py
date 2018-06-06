@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from .base_view import *
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib import messages
 from ..models import TitleGrant
 
 
+@login_required()
 def show(request, user_id):
     """View a page for a single profile."""
 
@@ -29,6 +31,7 @@ def logout(request):
     return redirect("ctf_framework:home#index")
 
 
+@login_required()
 def edit(request, user_id):
     """Edit User Profile."""
     try:
@@ -57,6 +60,7 @@ def edit(request, user_id):
     return render(request, "profile/edit.html", context)
 
 
+@login_required()
 def update(request, user_id):
     """Update User Profile."""
     try:
@@ -102,6 +106,7 @@ def update(request, user_id):
     return redirect("ctf_framework:profile#show", user_id)
 
 
+@login_required()
 def add_title(request, user_id):
     if not request.user.is_staff:
         return HttpResponseForbidden()
@@ -118,6 +123,7 @@ def add_title(request, user_id):
     return redirect("ctf_framework:profile#edit", user_id)
 
 
+@login_required()
 def delete_title(request, user_id, title_id):
     if not request.user.is_staff:
         return HttpResponseForbidden()

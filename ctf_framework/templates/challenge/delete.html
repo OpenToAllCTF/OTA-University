@@ -1,0 +1,10 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <form action ="#" method="POST">
+    Are You Sure You Want To Delete: <br>{{ challenge }}?<br>
+    {% csrf_token %}
+    <input type="submit" value="Yes"/>
+    <input type="button" value="No" onclick="window.history.back()"/>
+    </form>
+
+{% endblock %}

@@ -24,6 +24,7 @@ urlpatterns = [
     path('challenge/create', challenge.create, name="challenge#create"),
     path('challenge/<int:challenge_id>/edit', challenge.edit, name="challenge#edit"),
     path('challenge/<int:challenge_id>/update', challenge.update, name="challenge#update"),
+    path('challenge/<int:challenge_id>/delete', challenge.delete, name="challenge#delete"),
 
     # Category
     path('categories/', category.index, name="category#index"),
@@ -44,5 +45,8 @@ urlpatterns = [
     path('writeups/submit', writeup.submit, name="writeup#submit"),
     path('writeup/<int:writeup_id>', writeup.show, name="writeup#show"),
     path('writeup/<int:writeup_id>/edit', writeup.edit, name="writeup#edit"),
+
+    # Uploads
+    path('upload', upload.index, name="upload#index"),
 
 ]

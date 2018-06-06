@@ -32,7 +32,8 @@
                     {% endif %}
                     <h4 class="card-title">{{ challenge.info.name }}</h4>
                     <h5 class="card-subtitle mb-2">{{ challenge.info.point_value }} points</h5>
-                    <p class="card-text">{{ challenge.info.description }}</p>
+                    <p class="card-text">Author: {{ challenge.info.author }}</p>
+                    <p class="card-text">{{ challenge.info.description|linebreaks }}</p>
                     <p class="card-text">{{ challenge.info.url }}</p>
                     {% if challenge.is_completed %}
                         <a class="btn btn-secondary btn-sm"
@@ -42,6 +43,9 @@
                     {% endif %}
                     {% if request.user.is_staff %}
                         <a href="{% url "ctf_framework:challenge#edit" challenge.info.id %}">Edit</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{% url "ctf_framework:challenge#delete" challenge.info.id %}">Delete</a>
+                        &nbsp;&nbsp;&nbsp;
                     {% endif %}
 
                     </div>
@@ -61,7 +65,8 @@
                         {% endif %}
                         <h4 class="card-title"> <u>&lt;NOT ACTIVE&gt;</u><br>{{ challenge.info.name }}</h4>
                         <h5 class="card-subtitle mb-2">{{ challenge.info.point_value }} points</h5>
-                        <p class="card-text">{{ challenge.info.description }}</p>
+                        <p class="card-text">Author: {{ challenge.info.author }}</p>
+                        <p class="card-text">{{ challenge.info.description|linebreaks }}</p>
                         <p class="card-text">{{ challenge.info.url }}</p>
                         {% if challenge.is_completed %}
                             <a class="btn btn-secondary btn-sm"
@@ -71,6 +76,9 @@
                         {% endif %}
                         {% if request.user.is_staff %}
                             <a href="{% url "ctf_framework:challenge#edit" challenge.info.id %}">Edit</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url "ctf_framework:challenge#delete" challenge.info.id %}">Delete</a>
+                            &nbsp;&nbsp;&nbsp;
                         {% endif %}
 
                         </div>
