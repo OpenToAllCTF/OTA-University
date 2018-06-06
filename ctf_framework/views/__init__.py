@@ -4,3 +4,4 @@ from .challenge import *
 from .writeup import *
 from .category import *
 from .title import *
+from .rules import *

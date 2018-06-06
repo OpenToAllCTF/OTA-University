@@ -41,6 +41,9 @@
         <a class="nav-item nav-link" href="{% url 'ctf_framework:home#index' %}">
           Home
         </a>
+          <a class="nav-item nav-link" href="{% url 'ctf_framework:rules#index' %}">
+          Rules
+        </a>
 
         {% if request.user.is_authenticated %}
           <a class="nav-item nav-link"
@@ -52,7 +55,7 @@
 
                 <a class="nav-item nav-link"
                    href="{% url 'ctf_framework:title#index' %}">Titles</a>
-                
+
             {% endif %}
 
         {% endif %}

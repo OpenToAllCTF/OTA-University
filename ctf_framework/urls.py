@@ -46,4 +46,7 @@ urlpatterns = [
     path('writeup/<int:writeup_id>', writeup.show, name="writeup#show"),
     path('writeup/<int:writeup_id>/edit', writeup.edit, name="writeup#edit"),
 
+    # Rules
+    path("rules", rules.index, name="rules#index")
+
 ]
