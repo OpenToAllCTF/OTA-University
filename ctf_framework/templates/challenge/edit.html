@@ -5,5 +5,7 @@
     {{ form.as_p }}
     <input type="submit" value="Submit"/>
     </form>
+    <a href="{% url "ctf_framework:challenge#delete" challenge_id %}">Delete</a>
+
 
 {% endblock %}
