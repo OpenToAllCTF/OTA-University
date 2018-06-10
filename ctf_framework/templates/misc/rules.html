@@ -1,30 +1,18 @@
 {% extends 'layouts/base.html' %}
-
 {% load static %}
-
 {% block content %}
-    <style>
-        ol.c {
-            list-style-type: upper-roman;
-        }
-    </style>
-
-
-    <ol class="c">
-        <li>This site is for learning. Nudging others with small hints for challenges is fine, but don't give out solutions or flags.</li>
-        <li>Don't attack the infrastructure. Finding bugs is okay, pummeling the site is not.</li>
-        <li>Don't try to brute-force flags or hosted challenges.</li>
-        <li>If you find a major bug on the University site or with a challenge, let an OTA admin (or Reznok) know immediately.</li>
-        <li>Unless stated otherwise, flags are in format: OTA{content}</li>
-        <li>Don't be a Dick</li>
-    </ol>
-    <br>
-    <br>
-    <p>Can You Follow These Rules?</p>
-    <br>
-    <input type="button" value="No!" onclick="window.location.href='https://youtu.be/4TIjL7yq8oY?t=1'"/>
-    <input type="button" value="Yes!" onclick="alert('OTA{Ready_To_Learn!}');"/>
-
-
-
+  <ol style="list-style-type: upper-roman;">
+      <li>This site is for learning. Nudging others with small hints for challenges is fine, but don't give out solutions or flags.</li>
+      <li>Don't attack the infrastructure. Finding bugs is okay, pummeling the site is not.</li>
+      <li>Don't try to brute-force flags or hosted challenges.</li>
+      <li>If you find a major bug on the University site or with a challenge, let an OTA admin (or Reznok) know immediately.</li>
+      <li>Unless stated otherwise, flags are in format: OTA{content}</li>
+      <li>Don't be a Dick</li>
+  </ol>
+  <br>
+  <br>
+  <p>Can You Follow These Rules?</p>
+  <br>
+  <input type="button" value="No!" onclick="window.location.href='https://youtu.be/4TIjL7yq8oY?t=1'"/>
+  <input type="button" value="Yes!" onclick="alert('OTA{Ready_To_Learn!}');"/>
 {% endblock %}
