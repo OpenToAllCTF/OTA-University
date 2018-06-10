@@ -25,16 +25,38 @@
             {% if challenge.info.is_active %}
                 <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                 <div class="card">
+
                     {% if challenge.is_completed %}
                         <div class="card-body bg-success text-white">
                     {% else %}
                         <div class="card-body">
                     {% endif %}
-                    <h4 class="card-title">{{ challenge.info.name }}</h4>
-                    <h5 class="card-subtitle mb-2">{{ challenge.info.point_value }} points</h5>
-                    <p class="card-text">Author: {{ challenge.info.author }}</p>
-                    <p class="card-text">{{ challenge.info.description|linebreaks }}</p>
-                    <p class="card-text">{{ challenge.info.url }}</p>
+
+                    <h5 class="card-title">
+                      <span>{{ challenge.info.name }}</span>
+                      <span class="float-right badge badge-info">
+                        {{ challenge.info.point_value }} pts
+                      </span>
+                    </h5>
+
+                    <p class="card-text"><b>Author:</b>&nbsp;
+                      {{ challenge.info.author }}
+                    </p>
+
+                    <p class="card-text">
+                      {{ challenge.info.description|linebreaks|urlize }}
+                    </p>
+
+                    <hr/>
+
+                    <p class="card-text">
+                      {% if "http" in challenge.info.url %}
+                        {{ challenge.info.url|urlize }}
+                      {% else %}
+                        {{ challenge.info.url }}
+                      {% endif %}
+                    </p>
+
                     {% if challenge.is_completed %}
                         <a class="btn btn-secondary btn-sm"
                            href="{% url "ctf_framework:writeup#index" challenge.info.id %}" role="button">
