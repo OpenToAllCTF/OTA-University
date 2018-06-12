@@ -1,20 +1,53 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
-    {% if can_edit %}
-        <a href="{% url "ctf_framework:profile#edit" user.id %}">Edit</a><br><br>
-    {% endif %}
 
-User: {{ user }}<br>
-Title: {{ user.active_title }}<br>
-Score: {{ user.get_score }}<br>
-<br>
-<u>Completed Challenges</u><br>
-{% for category, challenges in completed_challenges.items %}
-    <b>{{ category }}</b><br>
-    {% for challenge in challenges %}
-        {{ challenge }}<br>
-    {% endfor %}
-<br><br>
+  <div class="center-content">
+    <div class="card">
+      <h5 class="card-header">
+        Profile Information
+        {% if can_edit %}
+          <a class="float-right"
+             href="{% url "ctf_framework:profile#edit" user.id %}">Edit</a>
+        {% endif %}
+      </h5>
+      <div class="card-body">
+        <p class="card-text">
+          <b>Username : </b>{{ user }}
+          </br>
+          <b>Title : </b><span class="badge badge-dark">{{ user.active_title }}</span>
+          </br>
+          <b>Current Score : </b> {{ user.get_score }}
+        </p>
+      </div>
+    </div>
 
-{% endfor %}
+    </br>
+    <div>
+      <h4>Completed Challenges</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Challenge Name</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category, challenges in completed_challenges.items %}
+            {% for challenge in challenges %}
+              <tr>
+                <td>
+                  {{ challenge.name }}
+                  <span class="float-right badge badge-info">
+                    {{ challenge.point_value }} points
+                  </span>
+                </td>
+                <td> {{ category }} </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}
