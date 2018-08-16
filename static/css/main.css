@@ -2,3 +2,7 @@
   width: 75vw;
   margin: 0 auto;
 }
+
+.link-success a {
+  color: white;
+}

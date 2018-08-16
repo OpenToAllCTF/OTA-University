@@ -35,7 +35,7 @@
 
                     {# User completed challenge #}
                     {% if challenge.is_completed %}
-                        <div class="card-body bg-success text-white">
+                        <div class="card-body bg-success text-white link-success">
                     {% else %}
                         <div class="card-body">
                     {% endif %}
@@ -52,7 +52,7 @@
 
                         {# Challenge is active #}
                         {% if challenge.info.is_active %}
-                            <span class="float-right badge badge-info">
+                            <span class="float-right badge badge-info border border-white">
                       {{ challenge.info.point_value }} pts
                     </span>
 
