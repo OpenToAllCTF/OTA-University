@@ -1,6 +1,7 @@
+from __future__ import division
 from django.db import models
 from django.contrib.auth.models import User
-
+import math
 
 class Title(models.Model):
     """Titles that can be awarded to users."""
@@ -33,7 +34,6 @@ class Challenge(models.Model):
     author = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
     flag = models.CharField(max_length=100, unique=True)
-    point_value = models.IntegerField(default=0)
     is_active = models.BooleanField(default=False)
     category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
     url = models.CharField(max_length=100, blank=True)
@@ -50,6 +50,23 @@ class Challenge(models.Model):
 
     def get_total_solves(self):
         return len(self.challengesolve_set.all())
+
+    @property
+    def point_value(self):
+        challenge_max = 500
+        challenge_min = 50
+        decay = 30
+        value = (
+                    (
+                        (challenge_min - challenge_max)/(decay**2)
+                    ) * (self.get_total_solves()**2)
+                ) + challenge_max
+
+        value = math.ceil(value)
+        if value < challenge_min:
+            value = challenge_min
+
+        return value
 
 
 class UserProfile(models.Model):
