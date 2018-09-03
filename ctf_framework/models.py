@@ -53,9 +53,9 @@ class Challenge(models.Model):
 
     @property
     def point_value(self):
-        challenge_max = 500
-        challenge_min = 50
-        decay = 30
+        challenge_max = 500.0
+        challenge_min = 50.0
+        decay = 30.0
         value = (
                     (
                         (challenge_min - challenge_max)/(decay**2)
@@ -63,10 +63,7 @@ class Challenge(models.Model):
                 ) + challenge_max
 
         value = math.ceil(value)
-        if value < challenge_min:
-            value = challenge_min
-
-        return value
+        return max(int(value), int(challenge_min))
 
 
 class UserProfile(models.Model):
