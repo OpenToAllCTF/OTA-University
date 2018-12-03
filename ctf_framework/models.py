@@ -13,18 +13,18 @@ class Title(models.Model):
         return self.title
 
 
-class ChallengeCategory(models.Model):
+class Category(models.Model):
     """
     CTF challenge categories that can be dynamically added.
     Objects cannot be deleted if a challenge object references them.
     """
 
-    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class Challenge(models.Model):
@@ -35,18 +35,17 @@ class Challenge(models.Model):
     description = models.TextField(max_length=1000)
     flag = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=False)
-    category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
-    url = models.CharField(max_length=100, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
-    def get_first_blood(self):
-        try:
-            return self.challengesolve_set.all().order_by('solve_time')[0].user.display_name
-        except:
-            return "None"
+    def first_blood(self):
+        """Returns the first user who has solved the challenge."""
+
+        return self.challengesolve_set.all().order_by('solve_time')[0].user or "None"
 
     def get_total_solves(self):
         return len(self.challengesolve_set.all())
@@ -99,7 +98,7 @@ class UserProfile(models.Model):
         return sum([c.point_value for c in self.completed_challenges.all()])
 
     def get_completed_challenges(self):
-        """Returns a dictionary of {str ChallengeCategory: [completed challenge,],}."""
+        """Returns a dictionary of {str Category: [completed challenge,],}."""
 
         completed_challenges = {}
 

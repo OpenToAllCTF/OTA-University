@@ -1,17 +1,19 @@
-from .models import Challenge, UserProfile, ChallengeCategory, Title
+from .models import Challenge, UserProfile, Category, Title
 from django.forms import ModelForm
 
 
 class ChallengeForm(ModelForm):
     class Meta:
         model = Challenge
-        fields = ["name", "author", "description", "category", "url", "is_active", "flag"]
+        fields = [
+            "name", "author", "description", "category",
+            "connection_info", "is_active", "flag"
+        ]
 
-
-class ChallengeCategoryForm(ModelForm):
+class CategoryForm(ModelForm):
     class Meta:
-        model = ChallengeCategory
-        fields = ["category", "description"]
+        model = Category
+        fields = ["name", "description"]
 
 
 class TitleForm(ModelForm):
