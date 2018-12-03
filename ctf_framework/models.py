@@ -42,13 +42,9 @@ class Challenge(models.Model):
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
-    def first_blood(self):
-        """Returns the first user who has solved the challenge."""
-
-        return self.challengesolve_set.all().order_by('solve_time')[0].user or "None"
-
-    def get_total_solves(self):
-        return len(self.challengesolve_set.all())
+    @property
+    def number_of_solves(self):
+        return self.challengesolve_set.count
 
     @property
     def point_value(self):
@@ -58,7 +54,7 @@ class Challenge(models.Model):
         value = (
                     (
                         (challenge_min - challenge_max)/(decay**2)
-                    ) * (self.get_total_solves()**2)
+                    ) * (self.number_of_solves()**2)
                 ) + challenge_max
 
         value = math.ceil(value)
