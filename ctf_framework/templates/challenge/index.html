@@ -1,115 +1,52 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-    <div class="container">
+<div class="container">
 
-    <!-- Flag submission form -->
-    <div class="mb-5">
-        <form action="{% url 'ctf_framework:challenge#submit' %}" method="POST">
-            <div class="input-group">
-                <input name="flag" class="form-control" type="textfield">
-                <div class="input-group-append">
-                    <input class="btn btn-success" type="submit" value="Submit Flag">
-                </div>
-                {% csrf_token %}
-            </div>
-        </form>
-    </div>
+  <!-- Flag submission form -->
+  <div class="mb-5">
+      <form action="{% url 'ctf_framework:challenge#submit' %}" method="POST">
+          <div class="input-group">
+              <input name="flag" class="form-control" type="textfield">
+              <div class="input-group-append">
+                  <input class="btn btn-success" type="submit" value="Submit Flag">
+              </div>
+              {% csrf_token %}
 
-    {# Show "Create challenge" button if staff #}
-    {% if request.user.is_staff %}
-        <a class="btn btn-primary float-right"
-           href="{% url "ctf_framework:challenge#new" %}">Create Challenge</a>
-    {% endif %}
+              {# Show "Create challenge" button if staff #}
+              {% if request.user.is_staff %}
+                <a class="btn btn-primary ml-2"
+                  href="{% url "ctf_framework:challenge#new" %}">Create Challenge</a>
+              {% endif %}
+          </div>
+      </form>
 
-    {# Iterate through available challenges #}
+  </div>
+
+  {# Category tabs #}
+  <ul class="nav nav-tabs mb-5">
     {% for category, challenges in categories.items %}
-        <h2>{{ category.category }}</h2>
-        <hr>
-        <div class="row">
-        {% for challenge in challenges %}
-
-            {# Show the challenge if it is active or if the user is staff #}
-            {% if challenge.info.is_active or request.user.is_staff %}
-                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-                <div class="card">
-
-                    {# User completed challenge #}
-                    {% if challenge.is_completed %}
-                        <div class="card-body bg-success text-white link-success">
-                    {% else %}
-                        <div class="card-body">
-                    {% endif %}
-
-                    {# Challenge name and point value #}
-                    <h5 class="card-title">
-
-                        {# Show edit option if staff #}
-                        {% if request.user.is_staff %}
-                            <a href="{% url "ctf_framework:challenge#edit" challenge.info.id %}">{{ challenge.info.name }}</a>
-                        {% else %}
-                            <span>{{ challenge.info.name }}</span>
-                        {% endif %}
-
-                        {# Challenge is active #}
-                        {% if challenge.info.is_active %}
-                            <span class="float-right badge badge-info border border-white">
-                      {{ challenge.info.point_value }} pts
-                    </span>
-
-                        {% else %}
-
-                            {# Challenge is inactive #}
-                            <span class="float-right badge badge-danger">
-                      {{ challenge.info.point_value }} pts
-                    </span>
-                        {% endif %}
-                    </h5>
-
-                    {# Challenge author #}
-                    <p class="card-text"><b>Author:</b>&nbsp;
-                        {{ challenge.info.author }}
-
-                        <br>
-                        {# Number of Solves #}
-                        <b>Solves:</b>&nbsp;
-                        {{ challenge.info.get_total_solves }}
-                        <br>
-
-                        {# First Blood #}
-                        <b>First Blood:</b>&nbsp;
-                        {{ challenge.info.get_first_blood }}
-
-                    </p>
-
-                    {# Challenge description #}
-                    <p class="card-text">
-                        {{ challenge.info.description|linebreaks|urlize }}
-                    </p>
-
-                    <hr/>
-
-                    {# Challenge URL/endpoint #}
-                    <p class="card-text">
-                        {% if "http" in challenge.info.url %}
-                            {{ challenge.info.url|urlize }}
-                        {% else %}
-                            {{ challenge.info.url }}
-                        {% endif %}
-                    </p>
-
-                    {# Show writeups for users' who completed the challenge #}
-                    {% if challenge.is_completed %}
-                        <a class="btn btn-secondary btn-sm"
-                           href="{% url "ctf_framework:writeup#index" challenge.info.id %}"
-                           role="button">Writeups</a>
-                    {% endif %}
-
-                    </div>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
+      <li class="nav-item">
+        <a class="nav-link {% if forloop.first %} active {% endif %}" href="#{{ category }}"
+          data-toggle="tab">
+          {{ category }}
+        </a>
+      </li>
     {% endfor %}
+  </ul>
+
+  {# Tab contents #}
+  <div class="tab-content" id="category-tabs-contents">
+    {% for category, challenges in categories.items %}
+
+      <div class="tab-pane {% if forloop.first %} active {% endif %}" id="{{ category }}">
+        <div class="row">
+      {% for challenge in challenges %}
+        {% include "challenge/_challenge.html" with challenge=challenge %}
+      {% endfor %}
+
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
