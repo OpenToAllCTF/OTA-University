@@ -10,24 +10,19 @@ from datetime import datetime
 
 @login_required()
 def index(request):
-    """List all active challenges."""
+    """List all challenges."""
 
     user = UserProfile.objects.get(user=request.user)
-    challenges = Challenge.objects.all()
+    solved_challenges = [solve.challenge for solve in user.solves]
+    categories = Category.objects.all()
 
-    categories = {}
 
-    for challenge in challenges:
-        category = challenge.category
-        challenge_list = categories.get(category, [])
-        challenge_list.append({
-            "info": challenge,
-            "is_completed": challenge in user.completed_challenges.all(),
-        })
-        categories[category] = challenge_list
+    context = {
+        "categories" : categories,
+        "solved_challenges" : solved_challenges,
+        "user" : user
+    }
 
-    context = {"categories": categories,
-               }
     return render(request, "challenge/index.html", context)
 
 
