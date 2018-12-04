@@ -29,8 +29,8 @@ def index(request, challenge_id):
     user = UserProfile.objects.get(user=request.user)
     challenge = Challenge.objects.get(id=challenge_id)
 
-    if challenge in user.completed_challenges.all():
-        writeups = Writeup.objects.filter(challenge_id=challenge_id)
+    if user.has_solved(challenge):
+        writeups = Writeup.objects.filter(challenge_id=challenge.id)
         writeup = Writeup.objects.filter(user=user, challenge=challenge).first()
         context = {
             "challenge": challenge,
@@ -56,7 +56,7 @@ def show(request, writeup_id):
         markdown_attrs
     )
 
-    if challenge in user.completed_challenges.all():
+    if user.has_solved(challenge):
         context = {
             "writeup": writeup,
             "html": mark_safe(html)
@@ -75,7 +75,7 @@ def edit(request, writeup_id):
         writeup = Writeup.objects.get(id=writeup_id)
         challenge = Challenge.objects.get(id=writeup.challenge.id)
 
-        if user == writeup.user and challenge in user.completed_challenges.all():
+        if user.has_solved(challenge) and user == writeup.user:
             writeup = Writeup.objects.get(id=writeup_id)
             writeup.markdown = request.POST["markdown"]
             writeup.save()
@@ -92,7 +92,7 @@ def submit(request):
         user = UserProfile.objects.get(user=request.user)
         challenge = Challenge.objects.get(id=request.POST["challenge"])
 
-        if challenge in user.completed_challenges.all():
+        if user.has_solved(challenge):
             writeup = Writeup.objects.create(user=user, challenge=challenge, markdown=request.POST["markdown"])
             writeup.save()
 
