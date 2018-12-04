@@ -59,12 +59,12 @@
 
           <hr/>
 
-          {# Challenge URL/endpoint #}
+          {# Challenge connection information #}
           <p class="card-text">
-              {% if "http" in challenge.info.url %}
-                  {{ challenge.info.url|urlize }}
+              {% if "http" in challenge.info.connection_info %}
+                  {{ challenge.info.connection_info|urlize }}
               {% else %}
-                  {{ challenge.info.url }}
+                  {{ challenge.info.connection_info }}
               {% endif %}
           </p>
 

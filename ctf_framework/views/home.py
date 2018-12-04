@@ -8,7 +8,7 @@ def index(request):
     challenges = Challenge.objects.all()
 
     # Order users by score
-    sorted_users = sorted(users, key=lambda u: (-u.get_score(), u.last_solve_time))
+    sorted_users = sorted(users, key=lambda u: (-u.score, u.last_solve_time))
     context = {
         "users": sorted_users,
         "challenges": challenges

@@ -17,10 +17,11 @@ def show(request, user_id):
 
     user = UserProfile.objects.get(id=user_id)
     context = {
-        "user": user,
-        "completed_challenges": user.get_completed_challenges(),
-        "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
+        "user" : user,
+        "solves" : user.solves,
+        "can_edit" : request_user_profile == user_profile or request_user_profile.is_staff
     }
+
     return render(request, "profile/show.html", context)
 
 

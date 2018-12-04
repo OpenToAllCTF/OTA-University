@@ -16,7 +16,7 @@
           </br>
           <b>Title : </b><span class="badge badge-dark">{{ user.active_title }}</span>
           </br>
-          <b>Current Score : </b> {{ user.get_score }}
+          <b>Current Score : </b> {{ user.score }}
         </p>
       </div>
     </div>
@@ -29,21 +29,21 @@
           <tr>
             <th>Challenge Name</th>
             <th>Category</th>
+            <th>Solve date</th>
           </tr>
         </thead>
         <tbody>
-          {% for category, challenges in completed_challenges.items %}
-            {% for challenge in challenges %}
-              <tr>
-                <td>
-                  {{ challenge.name }}
-                  <span class="float-right badge badge-info">
-                    {{ challenge.point_value }} points
-                  </span>
-                </td>
-                <td> {{ category }} </td>
-              </tr>
-            {% endfor %}
+          {% for solve in solves %}
+            <tr>
+              <td>
+                {{ solve.challenge.name }}
+                <span class="float-right badge badge-info">
+                  {{ solve.challenge.point_value }} points
+                </span>
+              </td>
+              <td> {{ solve.challenge.category.name }} </td>
+              <td> {{ solve.date|date:"Y-m-d H:i:s" }} </td>
+            </tr>
           {% endfor %}
           </tr>
         </tbody>

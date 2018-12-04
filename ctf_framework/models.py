@@ -28,7 +28,7 @@ class Category(models.Model):
 
 
 class Challenge(models.Model):
-    """CTF challenges"""
+    """Represents a CTF challenge"""
 
     name = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
@@ -44,7 +44,7 @@ class Challenge(models.Model):
 
     @property
     def number_of_solves(self):
-        return self.challengesolve_set.count
+        return self.solve_set.count
 
     @property
     def point_value(self):
@@ -53,8 +53,8 @@ class Challenge(models.Model):
         decay = 30.0
         value = (
                     (
-                        (challenge_min - challenge_max)/(decay**2)
-                    ) * (self.number_of_solves()**2)
+                        (challenge_min - challenge_max) / (decay ** 2)
+                    ) * (self.number_of_solves() ** 2)
                 ) + challenge_max
 
         value = math.ceil(value)
@@ -69,8 +69,6 @@ class UserProfile(models.Model):
 
     display_name = models.CharField(max_length=100, default="NOT_AVAILABLE")
 
-    completed_challenges = models.ManyToManyField(Challenge, through="ChallengeSolve")
-
     earned_titles = models.ManyToManyField(Title, through="TitleGrant")
 
     # Active Title, Can Be Set To Any (even non-earned) By Admin
@@ -82,36 +80,36 @@ class UserProfile(models.Model):
     # Used for sorting the scoreboard
     last_solve_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-
     @property
     def is_staff(self):
         return self.user.is_staff
 
+    @property
+    def score(self):
+        return sum([solve.challenge.point_value for solve in self.solves])
+
+    @property
+    def solves(self):
+        return self.solve_set.all()
+
     def __str__(self):
         return self.display_name
 
-    def get_score(self):
-        return sum([c.point_value for c in self.completed_challenges.all()])
 
-    def get_completed_challenges(self):
-        """Returns a dictionary of {str Category: [completed challenge,],}."""
+class Solve(models.Model):
+    """Represents a challenge solved by a user at a specific time."""
 
-        completed_challenges = {}
-
-        for challenge in self.completed_challenges.all():
-            tmp = completed_challenges.get(challenge.category, [])
-            tmp.append(challenge)
-            completed_challenges[challenge.category] = tmp
-        return completed_challenges
-
-
-class ChallengeSolve(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
-    solve_time = models.DateTimeField(auto_now_add=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        ordering = ('-date',)
 
 
 class TitleGrant(models.Model):
+    """Represents a title granted to a user at a specific time."""
+
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     grant_time = models.DateTimeField(auto_now_add=True, blank=True)

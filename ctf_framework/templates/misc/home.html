@@ -20,7 +20,7 @@
           {% endif %}
         </td>
         <td>{{ user.last_solve_time|date:"Y-m-d H:i:s" }}</td>
-        <td>{{ user.get_score }}</td>
+        <td>{{ user.score }}</td>
       </tr>
       {% endfor %}
     </table>
