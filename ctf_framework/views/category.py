@@ -11,10 +11,9 @@ def index(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    categories = ChallengeCategory.objects.all()
+    categories = Category.objects.all()
+    context = { "categories": categories }
 
-    context = {"categories": categories,
-               }
     return render(request, "category/index.html", context)
 
 
@@ -25,9 +24,7 @@ def new(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    context = {
-        "form": ChallengeCategoryForm()
-    }
+    context = { "form": CategoryForm() }
 
     return render(request, "category/new.html", context)
 
@@ -42,7 +39,8 @@ def create(request):
     if request.method not in "POST":
         return HttpResponseNotAllowed(permitted_methods=["POST"])
 
-    form = ChallengeCategoryForm(request.POST)
+    form = CategoryForm(request.POST)
+
     if form.is_valid():
         form.save()
         messages.success(request, "Category Created!")
@@ -58,14 +56,12 @@ def edit(request, category_id):
         return HttpResponseForbidden()
 
     try:
-        category = ChallengeCategory.objects.get(id=category_id)
+        category = Category.objects.get(id=category_id)
     except ObjectDoesNotExist:
         return redirect("ctf_framework:category#index")
 
-    form = ChallengeCategoryForm(instance=category)
-
     context = {
-        "form": form,
+        "form": CategoryForm(instance=category),
         "category_id": category_id
     }
 
@@ -83,11 +79,11 @@ def update(request, category_id):
         return HttpResponseNotAllowed(permitted_methods=["POST"])
 
     try:
-        category = ChallengeCategory.objects.get(id=category_id)
+        category = Category.objects.get(id=category_id)
     except ObjectDoesNotExist:
         return redirect("ctf_framework:category#index")
 
-    form = ChallengeCategoryForm(request.POST, instance=category)
+    form = CategoryForm(request.POST, instance=category)
     if form.is_valid():
         form.save()
         messages.success(request, "Category Updated!")

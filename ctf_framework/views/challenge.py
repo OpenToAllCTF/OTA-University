@@ -3,31 +3,26 @@ from django.contrib import messages
 from .base_view import *
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
-from ..models import ChallengeSolve
+from ..models import Solve
 
 from datetime import datetime
 
 
 @login_required()
 def index(request):
-    """List all active challenges."""
+    """List all challenges."""
 
     user = UserProfile.objects.get(user=request.user)
-    challenges = Challenge.objects.all()
+    solved_challenges = [solve.challenge for solve in user.solves]
+    categories = Category.objects.all()
 
-    categories = {}
 
-    for challenge in challenges:
-        category = challenge.category
-        challenge_list = categories.get(category, [])
-        challenge_list.append({
-            "info": challenge,
-            "is_completed": challenge in user.completed_challenges.all(),
-        })
-        categories[category] = challenge_list
+    context = {
+        "categories" : categories,
+        "solved_challenges" : solved_challenges,
+        "user" : user
+    }
 
-    context = {"categories": categories,
-               }
     return render(request, "challenge/index.html", context)
 
 
@@ -44,7 +39,7 @@ def submit(request):
             challenge = Challenge.objects.get(flag=flag)
 
             # Add this challenge to user's completed challenges
-            solve, created = ChallengeSolve.objects.get_or_create(user=user, challenge=challenge)
+            solve, created = Solve.objects.get_or_create(user=user, challenge=challenge)
 
             if created:
                 user.last_solve_time = datetime.now()

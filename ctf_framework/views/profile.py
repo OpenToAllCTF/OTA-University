@@ -18,9 +18,10 @@ def show(request, user_id):
     user = UserProfile.objects.get(id=user_id)
     context = {
         "user": user,
-        "completed_challenges": user.get_completed_challenges(),
+        "solves": reversed(user.solves),
         "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
     }
+
     return render(request, "profile/show.html", context)
 
 
@@ -50,12 +51,14 @@ def edit(request, user_id):
         form = UserProfileForm(instance=user_profile)
         form.fields["active_title"].queryset = user_profile.earned_titles
 
-    context = {"form": form,
-               "user": user_profile}
+    context = {
+        "form": form,
+        "user": user_profile
+    }
 
+    # Get all titles that the user doesn't currently have available
     if request.user.is_staff:
-        # Get all titles that the user doesn't currently have available
-        context["unearned_titles"] = Title.objects.filter().exclude(id__in=user_profile.earned_titles.all())
+        context["unearned_titles"] = user_profile.missing_titles
         return render(request, "profile/edit_admin.html", context)
     return render(request, "profile/edit.html", context)
 
@@ -140,12 +143,3 @@ def delete_title(request, user_id, title_id):
         pass
 
     return redirect("ctf_framework:profile#edit", user_id)
-
-
-
-
-
-
-
-
-

@@ -13,43 +13,42 @@ class Title(models.Model):
         return self.title
 
 
-class ChallengeCategory(models.Model):
+class Category(models.Model):
     """
     CTF challenge categories that can be dynamically added.
     Objects cannot be deleted if a challenge object references them.
     """
 
-    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    @property
+    def challenges(self):
+        return self.challenge_set.all()
+
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class Challenge(models.Model):
-    """CTF challenges"""
+    """Represents a CTF challenge"""
 
     name = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
     flag = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=False)
-    category = models.ForeignKey(ChallengeCategory, on_delete=models.PROTECT)
-    url = models.CharField(max_length=100, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
-    def get_first_blood(self):
-        try:
-            return self.challengesolve_set.all().order_by('solve_time')[0].user.display_name
-        except:
-            return "None"
-
-    def get_total_solves(self):
-        return len(self.challengesolve_set.all())
+    @property
+    def number_of_solves(self):
+        return self.solve_set.count
 
     @property
     def point_value(self):
@@ -58,12 +57,21 @@ class Challenge(models.Model):
         decay = 30.0
         value = (
                     (
-                        (challenge_min - challenge_max)/(decay**2)
-                    ) * (self.get_total_solves()**2)
+                        (challenge_min - challenge_max) / (decay ** 2)
+                    ) * (self.number_of_solves() ** 2)
                 ) + challenge_max
 
         value = math.ceil(value)
         return max(int(value), int(challenge_min))
+
+    @property
+    def first_blood(self):
+        first_solve = self.solve_set.first()
+
+        if first_solve:
+            return first_solve.user
+
+        return None
 
 
 class UserProfile(models.Model):
@@ -73,8 +81,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="UserProfile")
 
     display_name = models.CharField(max_length=100, default="NOT_AVAILABLE")
-
-    completed_challenges = models.ManyToManyField(Challenge, through="ChallengeSolve")
 
     earned_titles = models.ManyToManyField(Title, through="TitleGrant")
 
@@ -87,36 +93,47 @@ class UserProfile(models.Model):
     # Used for sorting the scoreboard
     last_solve_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-
     @property
     def is_staff(self):
         return self.user.is_staff
 
+    @property
+    def score(self):
+        return sum([solve.challenge.point_value for solve in self.solves])
+
+    @property
+    def solves(self):
+        return self.solve_set.all()
+
+    @property
+    def titles(self):
+        return self.earned_titles.all()
+
+    @property
+    def missing_titles(self):
+        return Title.objects.filter().exclude(id__in=self.titles)
+
+    def has_solved(self, challenge):
+        return challenge.id in [solve.challenge.id for solve in self.solves]
+
     def __str__(self):
         return self.display_name
 
-    def get_score(self):
-        return sum([c.point_value for c in self.completed_challenges.all()])
 
-    def get_completed_challenges(self):
-        """Returns a dictionary of {str ChallengeCategory: [completed challenge,],}."""
+class Solve(models.Model):
+    """Represents a challenge solved by a user at a specific time."""
 
-        completed_challenges = {}
-
-        for challenge in self.completed_challenges.all():
-            tmp = completed_challenges.get(challenge.category, [])
-            tmp.append(challenge)
-            completed_challenges[challenge.category] = tmp
-        return completed_challenges
-
-
-class ChallengeSolve(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
-    solve_time = models.DateTimeField(auto_now_add=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        ordering = ('date', )
 
 
 class TitleGrant(models.Model):
+    """Represents a title granted to a user at a specific time."""
+
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     grant_time = models.DateTimeField(auto_now_add=True, blank=True)
