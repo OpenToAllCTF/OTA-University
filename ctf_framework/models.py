@@ -105,6 +105,14 @@ class UserProfile(models.Model):
     def solves(self):
         return self.solve_set.all()
 
+    @property
+    def titles(self):
+        return self.earned_titles.all()
+
+    @property
+    def missing_titles(self):
+        return Title.objects.filter().exclude(id__in=self.titles)
+
     def __str__(self):
         return self.display_name
 
