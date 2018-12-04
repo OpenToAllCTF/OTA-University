@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from .base_view import *
 from django.urls import reverse
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.utils.safestring import mark_safe
 from markdown import markdown
 from bleach import clean
@@ -48,7 +48,12 @@ def show(request, writeup_id):
     """View the page of a specific writeup."""
 
     user = UserProfile.objects.get(user=request.user)
-    writeup = Writeup.objects.get(id=writeup_id)
+
+    try:
+        writeup = Writeup.objects.get(id=writeup_id)
+    except:
+        return HttpResponseNotFound("Writeup does not exist")
+
     challenge = Challenge.objects.get(id=writeup.challenge.id)
     html = clean(
         markdown(writeup.markdown, extensions=['markdown.extensions.fenced_code', 'markdown.extensions.codehilite']),
