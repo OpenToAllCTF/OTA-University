@@ -64,6 +64,15 @@ class Challenge(models.Model):
         value = math.ceil(value)
         return max(int(value), int(challenge_min))
 
+    @property
+    def first_blood(self):
+        first_solve = self.solve_set.first()
+
+        if first_solve:
+            return first_solve.user
+
+        return None
+
 
 class UserProfile(models.Model):
     """Used for storing all user profile information and statistics."""
@@ -108,7 +117,7 @@ class Solve(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     class Meta:
-        ordering = ('-date',)
+        ordering = ('date', )
 
 
 class TitleGrant(models.Model):

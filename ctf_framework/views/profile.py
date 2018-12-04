@@ -18,7 +18,7 @@ def show(request, user_id):
     user = UserProfile.objects.get(id=user_id)
     context = {
         "user" : user,
-        "solves" : user.solves,
+        "solves" : reversed(user.solves),
         "can_edit" : request_user_profile == user_profile or request_user_profile.is_staff
     }
 
