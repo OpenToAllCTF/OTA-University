@@ -1,0 +1,59 @@
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      General
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead>
+          <th>Name</th>
+          <th>Point Value</th>
+          <th># of solves</th>
+          <th>First Blood</th>
+          <th>Author</th>
+        </thead>
+        <tbody>
+          {% for challenge in category.challenges %}
+            {% if challenge in solved_challenges %}
+              {% include "challenge/_challenge.html" with challenge=challenge is_solved=True %}
+            {% else %}
+              {% include "challenge/_challenge.html" with challenge=challenge is_solved=False %}
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% for subcategory in category.subcategories %}
+    <div class="card mt-4">
+      <div class="card-header">
+        {{ subcategory.name }}
+      </div>
+      <div class="card-body p-0">
+        <div class="container p-4">
+        <p class="card-text"> {{ subcategory.description }} </h5>
+        </div>
+        <table class="table table-hover mb-0">
+          <thead>
+            <th>Name</th>
+            <th>Point Value</th>
+            <th># of solves</th>
+            <th>First Blood</th>
+            <th>Author</th>
+          </thead>
+          <tbody>
+            {% for challenge in subcategory.challenges %}
+              {% if challenge in solved_challenges %}
+                {% include "challenge/_challenge.html" with challenge=challenge is_solved=True %}
+              {% else %}
+                {% include "challenge/_challenge.html" with challenge=challenge is_solved=False %}
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
