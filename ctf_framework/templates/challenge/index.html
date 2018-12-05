@@ -24,30 +24,21 @@
 
   {# Category tabs #}
   <ul class="nav nav-tabs mb-5">
-    {% for category in categories %}
+    {% for main_category in main_categories %}
       <li class="nav-item">
-        <a class="nav-link {% if forloop.first %} active {% endif %}" href="#{{ category }}"
+        <a class="nav-link {% if forloop.first %} active {% endif %}" href="#{{ main_category }}"
           data-toggle="tab">
-          {{ category }}
+          {{ main_category }}
         </a>
       </li>
     {% endfor %}
   </ul>
 
   {# Tab contents #}
-  <div class="tab-content" id="category-tabs-contents">
-    {% for category in categories %}
-
-      <div class="tab-pane {% if forloop.first %} active {% endif %}" id="{{ category }}">
-        <div class="row">
-          {% for challenge in category.challenges %}
-            {% if challenge in solved_challenges %}
-              {% include "challenge/_challenge.html" with challenge=challenge is_solved=True %}
-            {% else %}
-              {% include "challenge/_challenge.html" with challenge=challenge is_solved=False %}
-            {% endif %}
-          {% endfor %}
-        </div>
+  <div class="tab-content" id="main_category-tabs-contents">
+    {% for main_category in main_categories %}
+      <div class="tab-pane {% if forloop.first %} active {% endif %}" id="{{ main_category }}">
+        {% include "challenge/_category.html" with category=main_category %}
       </div>
     {% endfor %}
   </div>

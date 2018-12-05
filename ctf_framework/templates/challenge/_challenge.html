@@ -1,79 +1,62 @@
 {% block content %}
-{# Show the challenge if it is active or if the user is staff #}
   {% if challenge.is_active or request.user.is_staff %}
-      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-      <div class="card">
 
-          {# User completed challenge #}
-          {% if is_solved %}
-              <div class="card-body bg-success text-white link-success">
-          {% else %}
-              <div class="card-body">
-          {% endif %}
+    <tr data-toggle="collapse" data-target="#challenge-{{ challenge.id }}"
+      class="accordion-toggle">
+      <td>
+        {% if is_solved %}
+          <span class="mr-2 badge badge-success">Solved </span>
+        {% endif %}
 
-          {# Challenge name and point value #}
-          <h5 class="card-title">
+        {% if not challenge.is_active %}
+          <span class="mr-2 badge badge-danger">Disabled </span>
+        {% endif %}
 
-            {# Show edit option if staff #}
-            {% if request.user.is_staff %}
-                <a href="{% url "ctf_framework:challenge#edit" challenge.id %}">{{ challenge.name }}</a>
-            {% else %}
-                <span>{{ challenge.name }}</span>
-            {% endif %}
+        {% if request.user.is_staff %}
+          <a href="{% url "ctf_framework:challenge#edit" challenge.id %}">
+            {{ challenge.name }}
+          </a>
+        {% else %}
+            <span>{{ challenge.name }}</span>
+        {% endif %}
+      </td>
+      <td> {{ challenge.point_value }} </td>
+      <td> {{ challenge.number_of_solves }} </td>
+      <td> {{ challenge.first_blood }} </td>
+      <td> {{ challenge.author }} </td>
+    </tr>
 
-            {# Challenge is active #}
-            {% if challenge.is_active %}
-              <span class="float-right badge badge-info border border-white">
-                {{ challenge.point_value }} pts
-              </span>
-            {% else %} {# Challenge is inactive #}
-              <span class="float-right badge badge-danger">
-                {{ challenge.point_value }} pts
-              </span>
-            {% endif %}
-          </h5>
-
-          {# Challenge author #}
-          <p class="card-text"><b>Author:</b>&nbsp;
-              {{ challenge.author }}
-
-              <br>
-              {# Number of Solves #}
-              <b>Solves:</b>&nbsp;
-              {{ challenge.number_of_solves }}
-              <br>
-
-              {# First Blood #}
-              <b>First Blood:</b>&nbsp;
-              {{ challenge.first_blood }}
-
-          </p>
-
-          {# Challenge description #}
-          <p class="card-text">
+    <tr>
+      <td colspan="5" class="p-0">
+        <div id="challenge-{{ challenge.id }}" class="accordion-body collapse">
+          <div class="container p-4">
+            <div>
               {{ challenge.description|linebreaks|urlize }}
-          </p>
+            </div>
 
-          <hr/>
+            <hr/>
 
-          {# Challenge connection information #}
-          <p class="card-text">
+            <div>
+              Connection Info :
               {% if "http" in challenge.connection_info %}
                   {{ challenge.connection_info|urlize }}
               {% else %}
                   {{ challenge.connection_info }}
               {% endif %}
-          </p>
+            </div>
 
-          {# Show writeups for users' who completed the challenge #}
-          {% if is_solved %}
-              <a class="btn btn-secondary btn-sm"
-                 href="{% url "ctf_framework:writeup#index" challenge.id %}"
-                 role="button">Writeups</a>
-          {% endif %}
+            <hr/>
 
+            <div>
+              {% if is_solved %}
+                <a class="btn btn-secondary btn-sm"
+                   href="{% url "ctf_framework:writeup#index" challenge.id %}"
+                   role="button">Writeups</a>
+              {% endif %}
+            </div>
           </div>
-          </div>
-      </div>
+        </div>
+      </td>
+    </tr>
   {% endif %}
 {% endblock %}

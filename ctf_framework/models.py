@@ -26,7 +26,12 @@ class Category(models.Model):
 
     @property
     def challenges(self):
-        return self.challenge_set.all()
+        """Returns a list of challenges for a given category, sorted by number of solves"""
+        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves())
+
+    @property
+    def subcategories(self):
+        return self.category_set.all()
 
     def __str__(self):
         return self.name
