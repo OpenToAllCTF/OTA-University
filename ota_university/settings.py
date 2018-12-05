@@ -23,7 +23,6 @@ except FileNotFoundError:
     exit("ota_university/config.yaml Not Found (use ota_university/config.yaml.template)")
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -85,6 +84,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'custom_tags': 'ctf_framework.templatetags.custom_tags',
+            }
         },
     },
 ]
