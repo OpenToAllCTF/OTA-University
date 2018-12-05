@@ -24,7 +24,10 @@ def new(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    context = { "form": CategoryForm() }
+    context = {
+        'form': CategoryForm(),
+        'categories': Category.objects.all()
+    }
 
     return render(request, "category/new.html", context)
 

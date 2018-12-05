@@ -1,9 +1,32 @@
 {% extends "layouts/base.html" %}
 {% block content %}
+  <div class="container">
+    <h2>Create Category</h2>
     <form action ="{% url "ctf_framework:category#create" %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit"/>
-    </form>
+      {% csrf_token %}
 
+      <label>{{ form.name.name|title }}</label>
+      <input class="form-control" name="{{ form.name.html_name }}"
+             placeholder="Category name" type="text">
+
+      <br/>
+
+      <label>{{ form.description.name|title }}</label>
+      <textarea class="form-control" name="{{ form.description.html_name }}"
+                                     placeholder="Category description"></textarea>
+
+      <br/>
+
+      <label>{{ form.parent.name|title }} category (optional)</label>
+      <select class="form-control" name="{{ form.parent.html_name }}">
+        <option default selected value> -- Select an option -- </option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category }}</option>
+        {% endfor %}
+      </select>
+
+      <br/>
+      <input class="btn btn-primary" type="submit" value="Submit"/>
+    </form>
+  </div>
 {% endblock %}
