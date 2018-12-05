@@ -21,7 +21,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     @property
