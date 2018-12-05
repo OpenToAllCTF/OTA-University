@@ -5,3 +5,4 @@ from .writeup import *
 from .category import *
 from .title import *
 from .rules import *
+from .analytics import *

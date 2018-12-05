@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<h4>Solves</h4>
+<div class="table-wrapper-scroll-y">
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User</th>
+                <th scope="col">Challenge</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solve in solves %}
+            <tr>
+                <th scope="row">{{ solve.id }}</th>
+                <td>{{ solve.user.display_name }}</td>
+                <td>{{ solve.challenge.name }}</td>
+                <td>{{ solve.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock content %}
