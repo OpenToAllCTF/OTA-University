@@ -11,7 +11,7 @@ def index(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    categories = Category.objects.all()
+    categories = [category for category in Category.objects.all() if not category.parent]
     context = { "categories": categories }
 
     return render(request, "category/index.html", context)

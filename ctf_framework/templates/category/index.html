@@ -1,13 +1,33 @@
 {% extends "layouts/base.html" %}
 {% block content %}
   <div class="container">
-    <a href="{% url "ctf_framework:category#new" %}">Create Category</a>
-    <br>
-    <br>
-    <ul>
-      {% for category in categories %}
-          <li><a href="{% url "ctf_framework:category#edit" category.id %}">{{ category }}</a></li>
-      {% endfor %}
-    </ul>
+    <div>
+      <h2 class="d-inline">Categories</h2>
+      <a class="btn btn-primary float-right"
+        href="{% url "ctf_framework:category#new" %}">
+        Create Category
+      </a>
+    </div>
+
+    <div class="mt-4">
+      <ul>
+        {% for category in categories %}
+            <li>
+              <a href="{% url "ctf_framework:category#edit" category.id %}">
+                {{ category }}
+              </a>
+              <ul>
+                {% for subcategory in category.subcategories %}
+                  <li>
+                    <a href="{% url "ctf_framework:category#edit" subcategory.id %}">
+                      {{ subcategory }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 {% endblock %}
