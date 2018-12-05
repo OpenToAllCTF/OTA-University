@@ -11,3 +11,6 @@ db.sqlite3
 
 # Config
 config.yaml
+Pipfile
+db.bak.sqlite3
+ctf_framework/migrations/0019_auto_20181205_0741.py
