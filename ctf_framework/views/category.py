@@ -65,7 +65,8 @@ def edit(request, category_id):
 
     context = {
         "form": CategoryForm(instance=category),
-        "category_id": category_id
+        "category": category,
+        'categories': Category.objects.all()
     }
 
     return render(request, "category/edit.html", context)
