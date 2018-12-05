@@ -45,15 +45,14 @@
               {% endif %}
             </div>
 
-            <hr/>
-
-            <div>
-              {% if is_solved %}
+            {% if is_solved %}
+              <div>
+                <hr/>
                 <a class="btn btn-secondary btn-sm"
                    href="{% url "ctf_framework:writeup#index" challenge.id %}"
                    role="button">Writeups</a>
-              {% endif %}
-            </div>
+              </div>
+            {% endif %}
           </div>
         </div>
       </td>
