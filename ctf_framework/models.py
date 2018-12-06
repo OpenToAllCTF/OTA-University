@@ -127,8 +127,12 @@ class Solve(models.Model):
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def is_between_dates(self, start_date, end_date):
+        return self.date >= start_date and self.date <= end_date
+
     class Meta:
-        ordering = ('date', )
+        ordering = ('date',)
+        
 
 
 class TitleGrant(models.Model):

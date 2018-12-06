@@ -1,6 +1,8 @@
-$(document).ready(function() {
+$('#dtVerticalScroll').removeClass('d-none');
+
+$(document).ready(function () {
     $('#dtVerticalScroll').DataTable({
-        "scrollY": "200px",
+        "scrollY": "50vh",
         "scrollCollapse": true,
         order : [0, 'desc']
     });
