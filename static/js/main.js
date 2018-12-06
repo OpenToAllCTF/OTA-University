@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#dtVerticalScrollExample').DataTable({
+    $('#dtVerticalScroll').DataTable({
         "scrollY": "200px",
         "scrollCollapse": true,
     });
