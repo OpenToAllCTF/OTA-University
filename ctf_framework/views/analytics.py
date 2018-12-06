@@ -12,7 +12,7 @@ def index(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    solves = reversed(Solve.objects.all())
+    solves = Solve.objects.all().reverse()#[:1000] # last 1000 entries
     context = {"solves": solves}
 
     return render(request, "analytics/index.html", context)

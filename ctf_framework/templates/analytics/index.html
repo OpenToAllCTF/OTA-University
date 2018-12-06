@@ -1,28 +1,30 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-<h4>Solves</h4>
-<div class="table-wrapper-scroll-y">
 
-    <table class="table table-bordered table-striped">
+<div class="container">
+    <table id="dtVerticalScrollExample" scrollY="100px" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">User</th>
-                <th scope="col">Challenge</th>
-                <th scope="col">Date</th>
+                <th class="th-sm">#</th>
+                <th class="th-sm">User</th>
+                <th class="th-sm">Challenge</th>
+                <th class="th-sm">Category</th>
+                <th class="th-sm">Points</th>
+                <th class="th-sm">Date</th>
             </tr>
         </thead>
         <tbody>
             {% for solve in solves %}
             <tr>
-                <th scope="row">{{ solve.id }}</th>
+                <td>{{ solve.id }}</td>
                 <td>{{ solve.user.display_name }}</td>
                 <td>{{ solve.challenge.name }}</td>
+                <td>{{ solve.challenge.category.name }}</td>
+                <td>{{ solve.challenge.point_value }}</td>
                 <td>{{ solve.date }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
 </div>
 {% endblock content %}
