@@ -7,9 +7,7 @@ from ..models import Solve
 
 @login_required()
 def index(request):
-    """List all active Categories."""
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
+    """Get some solves metrics."""
 
     solves = Solve.objects.all()
 
