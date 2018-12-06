@@ -5,14 +5,13 @@ from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from ..models import Solve
 
-
 @login_required()
 def index(request):
     """List all active Categories."""
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    solves = Solve.objects.all().reverse()
-    context = {"solves": solves}
+    solves = Solve.objects.all()
 
+    context = {"solves": solves}
     return render(request, "analytics/index.html", context)
