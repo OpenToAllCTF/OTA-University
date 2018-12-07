@@ -14,18 +14,7 @@
                 <th class="th-sm">Date</th>
             </tr>
         </thead>
-        <tbody>
-            {% for solve in solves %}
-            <tr>
-                <td>{{ solve.id }}</td>
-                <td>{{ solve.user.display_name }}</td>
-                <td>{{ solve.challenge.name }}</td>
-                <td>{{ solve.challenge.category.name }}</td>
-                <td>{{ solve.challenge.point_value }}</td>
-                <td>{{ solve.date }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>
 {% endblock content %}
