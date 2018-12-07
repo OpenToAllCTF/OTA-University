@@ -33,6 +33,11 @@ class Category(models.Model):
     def subcategories(self):
         return self.category_set.all()
 
+    def is_child_of(self, category):
+        """Checks if a category is the child to another given category."""
+
+        return self.parent and self.parent.id == category.id
+
     def __str__(self):
         return self.name
 
@@ -133,8 +138,16 @@ class Solve(models.Model):
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def is_between_dates(self, start_date, end_date):
+        return self.date >= start_date and self.date <= end_date
+
+    def belongs_to_category(self, category):
+        """Checks if a solve belongs to a given category."""
+        return self.challenge.category.id == category.id or self.challenge.category.is_child_of(category)
+
     class Meta:
-        ordering = ('date', )
+        ordering = ('date',)
+
 
 
 class TitleGrant(models.Model):
