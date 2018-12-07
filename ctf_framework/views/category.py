@@ -11,7 +11,7 @@ def index(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    categories = Category.objects.all()
+    categories = [category for category in Category.objects.all() if not category.parent]
     context = { "categories": categories }
 
     return render(request, "category/index.html", context)
@@ -24,7 +24,10 @@ def new(request):
     if not request.user.is_staff:
         return HttpResponseForbidden()
 
-    context = { "form": CategoryForm() }
+    context = {
+        'form': CategoryForm(),
+        'categories': Category.objects.all()
+    }
 
     return render(request, "category/new.html", context)
 
@@ -62,7 +65,8 @@ def edit(request, category_id):
 
     context = {
         "form": CategoryForm(instance=category),
-        "category_id": category_id
+        "category": category,
+        'categories': Category.objects.all()
     }
 
     return render(request, "category/edit.html", context)

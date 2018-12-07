@@ -1,0 +1,33 @@
+{% block content %}
+  {% csrf_token %}
+
+  <label>{{ form.name.name|title }}</label>
+  <input class="form-control" name="{{ form.name.html_name }}"
+                          placeholder="Category name" value="{{ category.name }}" type="text">
+  <br/>
+
+  <label>{{ form.description.name|title }}</label>
+  <textarea class="form-control" name="{{ form.description.html_name }}"
+                         placeholder="Category description">{{ category.description }}</textarea>
+
+  <br/>
+
+  <label>{{ form.parent.name|title }} category (optional)</label>
+  <select class="form-control" name="{{ form.parent.html_name }}">
+    {% if not category.parent %}
+      <option default selected value> -- Select an option -- </option>
+    {% endif %}
+
+    {% for parent_category in categories %}
+      {% if category.parent.id == parent_category.id %}
+        <option selected value="{{ parent_category.id }}">{{ parent_category }}</option>
+      {% else %}
+        <option value="{{ parent_category.id }}">{{ parent_category }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+
+  <br/>
+  <input class="btn btn-primary" type="submit" value="Submit"/>
+
+{% endblock %}

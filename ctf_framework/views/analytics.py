@@ -9,7 +9,7 @@ from datetime import timedelta
 
 @login_required()
 def index(request):
-    """List analytics."""
+    """View analytics."""
 
     return render(request, "analytics/index.html")
 

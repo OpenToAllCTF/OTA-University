@@ -14,16 +14,17 @@ def index(request):
 
     user = UserProfile.objects.get(user=request.user)
     solved_challenges = [solve.challenge for solve in user.solves]
-    categories = Category.objects.all()
 
+    # Get all categories which have no parents
+    main_categories = [category for category in Category.objects.all() if not category.parent]
 
     context = {
-        "categories" : categories,
-        "solved_challenges" : solved_challenges,
-        "user" : user
+        'main_categories': main_categories,
+        'solved_challenges': solved_challenges,
+        'user' : user
     }
 
-    return render(request, "challenge/index.html", context)
+    return render(request, 'challenge/index.html', context)
 
 
 @login_required()

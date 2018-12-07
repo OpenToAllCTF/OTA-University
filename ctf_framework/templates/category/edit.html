@@ -1,9 +1,10 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-    <form action ="{% url "ctf_framework:category#update" category_id %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit"/>
+  <div class="container">
+    <h2>Edit Category</h2>
+    <form action ="{% url "ctf_framework:category#update" category.id %}" method="POST">
+      {% include 'category/_form.html' %}
     </form>
+  </div>
 
 {% endblock %}

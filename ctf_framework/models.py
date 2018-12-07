@@ -21,11 +21,17 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     @property
     def challenges(self):
-        return self.challenge_set.all()
+        """Returns a list of challenges for a given category, sorted by number of solves"""
+        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves())
+
+    @property
+    def subcategories(self):
+        return self.category_set.all()
 
     def __str__(self):
         return self.name
