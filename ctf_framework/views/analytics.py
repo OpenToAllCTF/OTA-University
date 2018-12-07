@@ -35,7 +35,7 @@ def latest_solves(request):
 def last_week(request):
 
     solves = Solve.objects.prefetch_related('challenge', 'user')
-    categories = Category.objects.all()
+    categories = [category for category in Category.objects.all() if not category.parent]
 
     chart_data = {}
     now = timezone.now()
@@ -48,12 +48,12 @@ def last_week(request):
             end = now - timedelta(days=offset)
             start = now - timedelta(days=offset + 1)
 
-            solve_count = len([solve for solve in solves if solve.is_between_dates(start, end) and solve.challenge.category_id == category.id])
+            solve_count = len([solve for solve in solves if solve.is_between_dates(start, end) and solve.belongs_to_category(category)])
             chart_data[category.name].append(solve_count)
 
     output = {
         'categories': list(chart_data.keys()),
-        'labels': ["{} hours ago".format(i * 24) for i in reversed(range(1, 7))] + [""],
+        'labels': ["{} days ago".format(i) for i in reversed(range(2, 7))] + ["1 day ago", ""],
         'data': chart_data
     }
 
