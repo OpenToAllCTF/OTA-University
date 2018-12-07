@@ -7,11 +7,9 @@ from ..models import Solve
 
 @login_required()
 def index(request):
-    """List all active Categories."""
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
+    """View analytics."""
 
     solves = Solve.objects.all()
 
-    context = {"solves": solves}
+    context = { "solves": solves }
     return render(request, "analytics/index.html", context)
