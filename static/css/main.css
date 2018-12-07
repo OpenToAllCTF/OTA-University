@@ -6,3 +6,8 @@
 .link-success a {
   color: white;
 }
+
+.challenge-row:hover {
+  cursor: pointer;
+}
+

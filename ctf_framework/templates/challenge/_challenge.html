@@ -1,7 +1,7 @@
 {% block content %}
   {% if challenge.is_active or request.user.is_staff %}
 
-    <tr data-toggle="collapse" data-target="#challenge-{{ challenge.id }}"
+    <tr class="challenge-row" data-toggle="collapse" data-target="#challenge-{{ challenge.id }}"
       class="accordion-toggle">
       <td>
         {% if is_solved %}
