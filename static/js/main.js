@@ -1,5 +1,3 @@
-$('#dtVerticalScroll').removeClass('d-none');
-
 $(document).ready(function () {
     $('#dtVerticalScroll').DataTable({
         "scrollY": "50vh",
@@ -37,7 +35,7 @@ $(document).ready(function() {
       'rgba(255, 159, 64, 0.2)'
     ];
 
-    borderColors = [
+    var borderColors = [
       'rgba(255,99,132,1)',
       'rgba(54, 162, 235, 1)',
       'rgba(255, 206, 86, 1)',
@@ -61,8 +59,8 @@ $(document).ready(function() {
       });
     });
 
-    var ctxL = document.getElementById("lineChart").getContext('2d');
-    var myLineChart = new Chart(ctxL, {
+    var context = document.getElementById("lineChart").getContext('2d');
+    var linechart = new Chart(context, {
       'type': 'line',
       'data': {
         'labels': labels,
