@@ -11,26 +11,7 @@ from datetime import timedelta
 def index(request):
     """List analytics."""
 
-    solves = Solve.objects.prefetch_related('challenge', 'user')
-
-    chart_data = {}
-    now = timezone.now()
-
-    for category in Category.objects.all():
-        chart_data[category] = []
-
-        for offset in range(7):
-            end = now - timedelta(days=offset)
-            start = now - timedelta(days=offset + 1)
-            solve_count = len([solve for solve in solves if solve.is_between_dates(start, end) and solve.challenge.category_id == category.id])
-            chart_data[category].append(solve_count)
-
-    context = {
-        "solves": solves,
-        # "chart_data": solves_chart_data
-    }
-
-    return render(request, "analytics/index.html", context)
+    return render(request, "analytics/index.html")
 
 @login_required
 def latest_solves(request):
@@ -45,7 +26,35 @@ def latest_solves(request):
             'challenge': solve.challenge.name,
             'category': solve.challenge.category.name,
             'points': solve.challenge.point_value,
-            'date': solve.date.strftime('%Y-%m-%S %T')
+            'date': solve.date.strftime('%Y-%m-%d %T')
         })
 
     return JsonResponse({ 'data': solves_json })
+
+@login_required
+def last_week(request):
+
+    solves = Solve.objects.prefetch_related('challenge', 'user')
+    categories = Category.objects.all()
+
+    chart_data = {}
+    now = timezone.now()
+
+    for category in categories:
+        chart_data[category.name] = []
+
+        for offset in reversed(range(7)):
+
+            end = now - timedelta(days=offset)
+            start = now - timedelta(days=offset + 1)
+
+            solve_count = len([solve for solve in solves if solve.is_between_dates(start, end) and solve.challenge.category_id == category.id])
+            chart_data[category.name].append(solve_count)
+
+    output = {
+        'categories': list(chart_data.keys()),
+        'labels': ["{} hours ago".format(i * 24) for i in reversed(range(1, 7))] + [""],
+        'data': chart_data
+    }
+
+    return JsonResponse(output)
