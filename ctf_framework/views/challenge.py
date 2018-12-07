@@ -46,6 +46,8 @@ def submit(request):
                 user.last_solve_time = datetime.now()
                 user.save()
 
+                challenge.update_number_of_solves()
+
             messages.success(request, "Correct!")
 
         except ObjectDoesNotExist:

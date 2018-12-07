@@ -27,7 +27,7 @@ class Category(models.Model):
     @property
     def challenges(self):
         """Returns a list of challenges for a given category, sorted by number of solves"""
-        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves())
+        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves)
 
     @property
     def subcategories(self):
@@ -53,13 +53,16 @@ class Challenge(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    number_of_solves = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
-    @property
-    def number_of_solves(self):
-        return self.solve_set.count
+    def update_number_of_solves(self):
+        """Recalculate the number of solves column."""
+
+        self.number_of_solves = self.solve_set.count()
+        self.save()
 
     @property
     def point_value(self):
@@ -69,7 +72,7 @@ class Challenge(models.Model):
         value = (
                     (
                         (challenge_min - challenge_max) / (decay ** 2)
-                    ) * (self.number_of_solves() ** 2)
+                    ) * (self.number_of_solves ** 2)
                 ) + challenge_max
 
         value = math.ceil(value)
@@ -139,6 +142,7 @@ class Solve(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def is_between_dates(self, start_date, end_date):
+        """Check if solve is between a range of dates."""
         return self.date >= start_date and self.date <= end_date
 
     def belongs_to_category(self, category):
