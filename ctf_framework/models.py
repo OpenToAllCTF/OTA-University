@@ -1,6 +1,7 @@
 from __future__ import division
 from django.db import models
 from django.contrib.auth.models import User
+from ctf_framework.utils.point_calculator import DynamicPointCalculator
 import math
 
 class Title(models.Model):
@@ -137,17 +138,10 @@ class Challenge(models.Model):
 
     @property
     def point_value(self):
-        challenge_max = 500.0
-        challenge_min = 50.0
-        decay = 30.0
-        value = (
-                    (
-                        (challenge_min - challenge_max) / (decay ** 2)
-                    ) * (self.number_of_solves ** 2)
-                ) + challenge_max
+        """Calculate point value dynamically based on the amount of solves."""
+        calculator = DynamicPointCalculator()
+        return calculator.calculate(self.number_of_solves)
 
-        value = math.ceil(value)
-        return max(int(value), int(challenge_min))
 
 
 class Solve(models.Model):
