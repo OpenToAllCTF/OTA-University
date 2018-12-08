@@ -27,4 +27,9 @@
 
 
 </div>
-{% endblock content %}
+{% endblock %}
+
+{% block scripts %}
+  {% load staticfiles %}
+  <script src="{% static '/js/custom/analytics.js' %}" type="text/javascript"></script>
+{% endblock %}

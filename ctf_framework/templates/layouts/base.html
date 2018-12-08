@@ -99,8 +99,7 @@
 </br>
 
 <div class="container-fluid">
-  {% block content %}
-  {% endblock %}
+  {% block content %}{% endblock %}
   <br/>
   <br/>
 </div>
@@ -116,6 +115,7 @@
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>
-<script src="{% static '/js/main.js' %}" type="text/javascript"></script>
+
+{% block scripts %}{% endblock %}
 </body>
 </html>

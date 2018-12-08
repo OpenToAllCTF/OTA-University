@@ -27,10 +27,11 @@ class Category(models.Model):
     @property
     def challenges(self):
         """Returns a list of challenges for a given category, sorted by number of solves"""
-        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves)
+        return self.challenge_set.all()
 
     @property
     def subcategories(self):
+        """Returns all subcategories of a category."""
         return self.category_set.all()
 
     def is_child_of(self, category):
@@ -40,52 +41,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Challenge(models.Model):
-    """Represents a CTF challenge"""
-
-    name = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
-    description = models.TextField(max_length=1000)
-    flag = models.CharField(max_length=100, unique=True)
-    is_active = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    connection_info = models.CharField(max_length=100, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    number_of_solves = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return "{} | {} | {}".format(self.category, self.point_value, self.name)
-
-    def update_number_of_solves(self):
-        """Recalculate the number of solves column."""
-
-        self.number_of_solves = self.solve_set.count()
-        self.save()
-
-    @property
-    def point_value(self):
-        challenge_max = 500.0
-        challenge_min = 50.0
-        decay = 30.0
-        value = (
-                    (
-                        (challenge_min - challenge_max) / (decay ** 2)
-                    ) * (self.number_of_solves ** 2)
-                ) + challenge_max
-
-        value = math.ceil(value)
-        return max(int(value), int(challenge_min))
-
-    @property
-    def first_blood(self):
-        first_solve = self.solve_set.first()
-
-        if first_solve:
-            return first_solve.user
-
-        return None
 
 
 class UserProfile(models.Model):
@@ -128,10 +83,71 @@ class UserProfile(models.Model):
         return Title.objects.filter().exclude(id__in=self.titles)
 
     def has_solved(self, challenge):
+        """Check if a user has solved a given challenge."""
         return challenge.id in [solve.challenge.id for solve in self.solves]
+
+    def solve(self, challenge):
+        """Add this challenge to user's completed challenges."""
+
+        solve, created = Solve.objects.get_or_create(user=self, challenge=challenge)
+
+        if created:
+            self.last_solve_time = datetime.now()
+            self.save()
+
+            challenge.update_number_of_solves()
+            challenge.update_first_blood()
+
 
     def __str__(self):
         return self.display_name
+
+class Challenge(models.Model):
+    """Represents a CTF challenge"""
+
+    name = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    description = models.TextField(max_length=1000)
+    flag = models.CharField(max_length=100, unique=True)
+    is_active = models.BooleanField(default=False)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    connection_info = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    number_of_solves = models.PositiveIntegerField(default=0)
+    first_blood = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=True, null=True)
+
+    def __str__(self):
+        return "{} | {} | {}".format(self.category, self.point_value, self.name)
+
+    def update_number_of_solves(self):
+        """Recalculate the number of solves column."""
+
+        self.number_of_solves = self.solve_set.count()
+        self.save()
+
+    def update_first_blood(self):
+        """Update first_blood if not set."""
+
+        if not first_blood:
+            solve = self.solve_set.first()
+
+            if solve:
+                self.first_blood = solve.user
+                self.save()
+
+    @property
+    def point_value(self):
+        challenge_max = 500.0
+        challenge_min = 50.0
+        decay = 30.0
+        value = (
+                    (
+                        (challenge_min - challenge_max) / (decay ** 2)
+                    ) * (self.number_of_solves ** 2)
+                ) + challenge_max
+
+        value = math.ceil(value)
+        return max(int(value), int(challenge_min))
 
 
 class Solve(models.Model):

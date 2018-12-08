@@ -38,7 +38,7 @@
   <div class="tab-content" id="main_category-tabs-contents">
     {% for main_category in main_categories %}
       <div class="tab-pane {% if forloop.first %} active {% endif %}" id="{{ main_category }}">
-        {% include "challenge/_category.html" with category=main_category %}
+        {% include "challenge/_category.html" with category=main_category solved_challenges=solved_challenges %}
       </div>
     {% endfor %}
   </div>

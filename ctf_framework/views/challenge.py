@@ -13,10 +13,14 @@ def index(request):
     """List all challenges."""
 
     user = UserProfile.objects.get(user=request.user)
-    solved_challenges = [solve.challenge for solve in user.solves]
-
-    # Get all categories which have no parents
-    main_categories = [category for category in Category.objects.all() if not category.parent]
+    solves = user.solve_set.select_related().only('challenge')
+    solved_challenges = [solve.challenge for solve in solves]
+    main_categories = Category.objects.filter(parent_id=None) \
+                                  .prefetch_related('category_set') \
+                                  .prefetch_related('challenge_set') \
+                                  .prefetch_related('challenge_set__first_blood') \
+                                  .prefetch_related('category_set__challenge_set') \
+                                  .prefetch_related('category_set__challenge_set__first_blood')
 
     context = {
         'main_categories': main_categories,
@@ -39,14 +43,7 @@ def submit(request):
             # Check for matching challenge with this flag
             challenge = Challenge.objects.get(flag=flag)
 
-            # Add this challenge to user's completed challenges
-            solve, created = Solve.objects.get_or_create(user=user, challenge=challenge)
-
-            if created:
-                user.last_solve_time = datetime.now()
-                user.save()
-
-                challenge.update_number_of_solves()
+            user.solve(challenge)
 
             messages.success(request, "Correct!")
 
