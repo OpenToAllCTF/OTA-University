@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from .base_view import *
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib import messages
-from ..models import TitleGrant
+from ..models import TitleGrant, Solve
 
 
 @login_required()
@@ -10,16 +10,18 @@ def show(request, user_id):
     """View a page for a single profile."""
 
     try:
-        user_profile = UserProfile.objects.get(id=user_id)
-        request_user_profile = UserProfile.objects.get(user=request.user)
+        target_user = UserProfile.objects.get(id=user_id)
+        solves = target_user.solves.select_related('challenge') \
+                                   .select_related('challenge__category')
+
+        current_user = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         return redirect("ctf_framework:home#index")
 
-    user = UserProfile.objects.get(id=user_id)
     context = {
-        "user": user,
-        "solves": reversed(user.solves),
-        "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
+        'user': target_user,
+        'solves': solves,
+        'can_edit': current_user.can_edit_user(target_user)
     }
 
     return render(request, "profile/show.html", context)

@@ -69,7 +69,8 @@ class UserProfile(models.Model):
 
     @property
     def score(self):
-        return sum([solve.challenge.point_value for solve in self.solves])
+        solves_challenges = self.solves.select_related('challenge')
+        return sum([solve.challenge.point_value for solve in solves_challenges])
 
     @property
     def solves(self):
@@ -82,6 +83,10 @@ class UserProfile(models.Model):
     @property
     def missing_titles(self):
         return Title.objects.filter().exclude(id__in=self.titles)
+
+    def can_edit_user(self, user):
+        """Check if user can edit another given user."""
+        return self.is_staff or self.id == user.id
 
     def has_solved(self, challenge):
         """Check if a user has solved a given challenge."""
