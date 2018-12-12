@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from .base_view import *
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.contrib import messages
-from ..models import TitleGrant
+from django.db.models import Prefetch
+from ..models import TitleGrant, Solve
 
 
 @login_required()
@@ -16,9 +17,18 @@ def show(request, user_id):
         return redirect("ctf_framework:home#index")
 
     user = UserProfile.objects.get(id=user_id)
+    solves = Solve.objects.filter(user_id=user_id).prefetch_related(
+            Prefetch('challenge__writeup_set',
+                     queryset=Writeup.objects.filter(user_id=user_id),
+                     to_attr='user_writeup')
+            )
+
+    for solve in solves:
+        solve.challenge.user_writeup = next(iter(solve.challenge.user_writeup), None)
+
     context = {
         "user": user,
-        "solves": reversed(user.solves),
+        "solves": reversed(solves),
         "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
     }
 

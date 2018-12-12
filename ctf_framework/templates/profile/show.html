@@ -30,6 +30,7 @@
             <th>Challenge Name</th>
             <th>Category</th>
             <th>Validation date</th>
+            <th>Writeups</th>
           </tr>
         </thead>
         <tbody>
@@ -37,12 +38,24 @@
             <tr>
               <td>
                 {{ solve.challenge.name }}
-                <span class="float-right badge badge-info">
-                  {{ solve.challenge.point_value }} points
+                <span class="float-right">
+                  <span class="badge badge-info">
+                    {{ solve.challenge.point_value }} points
+                  </span>
                 </span>
+
               </td>
               <td> {{ solve.challenge.category.name }} </td>
               <td> {{ solve.date|date:"Y-m-d H:i:s" }} </td>
+              <td style="width: 1%">
+                {% if solve.challenge.user_writeup %}
+                  <div class="btn btn-sm btn-secondary mx-auto">
+                    <a class="text-white"
+                       href="{% url "ctf_framework:writeup#show" solve.challenge.user_writeup.id %}"
+                       role="button">View writeup</a>
+                  </div>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
           </tr>
