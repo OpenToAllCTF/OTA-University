@@ -1,22 +1,24 @@
 {% extends "../layouts/base.html" %}
+{% load rules %}
 {% block content %}
 
   <div class="center-content">
     <div class="card">
       <h5 class="card-header">
         Profile Information
+        {% has_perm 'edit_profile' user profile as can_edit %}
         {% if can_edit %}
           <a class="float-right"
-             href="{% url "ctf_framework:profile#edit" user.id %}">Edit</a>
+             href="{% url "ctf_framework:profile#edit" profile.id %}">Edit</a>
         {% endif %}
       </h5>
       <div class="card-body">
         <p class="card-text">
-          <b>Username : </b>{{ user }}
+          <b>Username : </b>{{ profile }}
           </br>
-          <b>Title : </b><span class="badge badge-dark">{{ user.active_title }}</span>
+          <b>Title : </b><span class="badge badge-dark">{{ profile.active_title }}</span>
           </br>
-          <b>Current Score : </b> {{ user.score }}
+          <b>Current Score : </b> {{ profile.score }}
         </p>
       </div>
     </div>
