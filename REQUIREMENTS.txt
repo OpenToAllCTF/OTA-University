@@ -16,3 +16,4 @@ slackclient==1.2.1
 urllib3==1.22
 webencodings==0.5.1
 websocket-client==0.47.0
+rules==2.0.1
