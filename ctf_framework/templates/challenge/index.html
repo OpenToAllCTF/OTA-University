@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% block content %}
+{% load custom_tags %}
 <div class="container">
 
   <!-- Flag submission form -->
@@ -26,7 +27,8 @@
   <ul class="nav nav-tabs mb-5">
     {% for main_category in main_categories %}
       <li class="nav-item">
-        <a class="nav-link {% if forloop.first %} active {% endif %}" href="#{{ main_category }}"
+        <a class="nav-link {% if forloop.first %} active {% endif %}"
+           href="#{{ main_category|lower|kebab }}"
           data-toggle="tab">
           {{ main_category }}
         </a>
@@ -37,10 +39,16 @@
   {# Tab contents #}
   <div class="tab-content" id="main_category-tabs-contents">
     {% for main_category in main_categories %}
-      <div class="tab-pane {% if forloop.first %} active {% endif %}" id="{{ main_category }}">
+      <div class="tab-pane {% if forloop.first %} active {% endif %}"
+           id="{{ main_category|lower|kebab }}">
         {% include "challenge/_category.html" with category=main_category %}
       </div>
     {% endfor %}
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {% load static %}
+  <script src="{% static '/js/custom/challenges.js' %}" type="text/javascript"></script>
 {% endblock %}
