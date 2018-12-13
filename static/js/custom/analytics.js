@@ -1,26 +1,26 @@
-$(document).ready(function () {
-    var el = document.getElementById("dtVerticalScroll");
-    if (el) {
-      $(el).DataTable({
-          "scrollY": "50vh",
-          "scrollCollapse": true,
-          "ajax": "/analytics/latest_solves.json",
-          "columns": [
-            { "data": "id" },
-            { "data": "user" },
-            { "data": "challenge" },
-            { "data": "category" },
-            { "data": "points" },
-            { "data": "date" }
-          ],
-          order : [0, 'desc']
-      });
+function setupLatestSolves() {
+  var el = document.getElementById("dtVerticalScroll");
+  if (el) {
+    $(el).DataTable({
+        "scrollY": "50vh",
+        "scrollCollapse": true,
+        "ajax": "/analytics/latest_solves.json",
+        "columns": [
+          { "data": "id" },
+          { "data": "user" },
+          { "data": "challenge" },
+          { "data": "category" },
+          { "data": "points" },
+          { "data": "date" }
+        ],
+        order : [0, 'desc']
+    });
 
-      $('.dataTables_length').addClass('bs-select');
+    $('.dataTables_length').addClass('bs-select');
   }
-});
+}
 
-$(document).ready(function() {
+function setupLastWeek() {
   var el = document.getElementById("lineChart");
   if (el) {
     $.get({
@@ -76,15 +76,13 @@ $(document).ready(function() {
       });
     }
   }
+
+}
+
+$(document).ready(function () {
+  setupLastWeek();
+  setupLatestSolves();
 });
 
-$(document).ready(function() {
-  var el = document.getElementById("markdown");
-  if (el) {
-    new SimpleMDE({
-      element: el,
-      spellChecker: false,
-      placeholder: "Use Markdown for your **writeup**:\n\n```python\nfrom pwn import *\n\ndef exploit():\n  pass\n```"
-    });
-  }
-});
+
+
