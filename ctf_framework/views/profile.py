@@ -5,18 +5,15 @@ from django.contrib import messages
 from django.db.models import Prefetch
 from ..models import TitleGrant, Solve
 
-
 @login_required()
 def show(request, user_id):
     """View a page for a single profile."""
 
     try:
-        user_profile = UserProfile.objects.get(id=user_id)
-        request_user_profile = UserProfile.objects.get(user=request.user)
+        profile = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return redirect("ctf_framework:home#index")
 
-    user = UserProfile.objects.get(id=user_id)
     solves = Solve.objects.filter(user_id=user_id).prefetch_related(
             Prefetch('challenge__writeup_set',
                      queryset=Writeup.objects.filter(user_id=user_id),
@@ -27,9 +24,8 @@ def show(request, user_id):
         solve.challenge.user_writeup = next(iter(solve.challenge.user_writeup), None)
 
     context = {
-        "user": user,
-        "solves": reversed(solves),
-        "can_edit": request_user_profile == user_profile or request_user_profile.is_staff
+        "profile": profile,
+        "solves": reversed(solves)
     }
 
     return render(request, "profile/show.html", context)

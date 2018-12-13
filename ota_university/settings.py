@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ctf_framework',
     'django_slack_oauth',
-    'rules'
+    'rules.apps.AutodiscoverRulesConfig'
 ]
 
 AUTHENTICATION_BACKENDS = (
