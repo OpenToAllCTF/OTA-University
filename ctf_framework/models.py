@@ -124,9 +124,6 @@ class UserProfile(models.Model):
     def missing_titles(self):
         return Title.objects.filter().exclude(id__in=self.titles)
 
-    def has_solved(self, challenge):
-        return challenge.id in [solve.challenge.id for solve in self.solves]
-
     def __str__(self):
         return self.display_name
 

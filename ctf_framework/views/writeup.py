@@ -26,12 +26,12 @@ markdown_attrs = {
 def index(request, challenge_id):
     """List all writeups for a challenge."""
 
-    user = UserProfile.objects.get(user=request.user)
+    profile = UserProfile.objects.get(user_id=request.user.id)
     challenge = Challenge.objects.get(id=challenge_id)
 
-    if user.has_solved(challenge):
+    if request.user.has_perm('read_writeups_for_challenge', challenge):
         writeups = Writeup.objects.filter(challenge_id=challenge.id)
-        writeup = Writeup.objects.filter(user=user, challenge=challenge).first()
+        writeup = Writeup.objects.filter(user_id=profile.id, challenge=challenge).first()
         context = {
             "challenge": challenge,
             "writeups": writeups,
@@ -47,7 +47,7 @@ def index(request, challenge_id):
 def show(request, writeup_id):
     """View the page of a specific writeup."""
 
-    user = UserProfile.objects.get(user=request.user)
+    profile = UserProfile.objects.get(user=request.user)
 
     try:
         writeup = Writeup.objects.get(id=writeup_id)
@@ -61,7 +61,7 @@ def show(request, writeup_id):
         markdown_attrs
     )
 
-    if user.has_solved(challenge):
+    if request.user.has_perm('read_writeups_for_challenge', challenge):
         context = {
             "writeup": writeup,
             "html": mark_safe(html)

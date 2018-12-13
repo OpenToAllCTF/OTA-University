@@ -6,8 +6,8 @@
     <div class="card">
       <h5 class="card-header">
         Profile Information
-        {% has_perm 'edit_profile' user profile as can_edit %}
-        {% if can_edit %}
+        {% has_perm 'update_profile' user profile as can_update %}
+        {% if can_update %}
           <a class="float-right"
              href="{% url "ctf_framework:profile#edit" profile.id %}">Edit</a>
         {% endif %}
