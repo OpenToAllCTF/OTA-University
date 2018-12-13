@@ -79,7 +79,7 @@ function setupLastWeek() {
 
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   setupLastWeek();
   setupLatestSolves();
 });
