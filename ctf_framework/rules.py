@@ -5,12 +5,23 @@ def is_staff(user):
     return user.is_staff
 
 @rules.predicate
-def is_own_profile(user, target_user_profile):
-    return user == target_user_profile.id
+def is_own_profile(user, profile):
+    return user.id == profile.user.id
 
-# Add rules
-rules.add_rule('is_staff', is_staff)
-rules.add_rule('is_own_profile', is_staff)
+@rules.predicate
+def has_solved_challenge(user, challenge):
+    solves = user.UserProfile.solves
+    return challenge.id in [solve.challenge.id for solve in solves]
+
+@rules.predicate
+def is_own_writeup(user, writeup):
+    return writeup.id in [writeup.id for writeup in user.UserProfile.writeups]
 
 # Add permissions
-rules.add_perm('edit_profile', is_staff | is_own_profile)
+## Profiles
+rules.add_perm('update_profile', is_staff | is_own_profile)
+
+## Writeups
+rules.add_perm('read_writeups_for_challenge', has_solved_challenge)
+rules.add_perm('create_writeup', has_solved_challenge)
+rules.add_perm('update_writeup', is_own_writeup)
