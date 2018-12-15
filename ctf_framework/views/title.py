@@ -1,28 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rules.contrib.views import permission_required
 from .base_view import *
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 
 
 @login_required()
+@permission_required('can_manage_titles')
 def index(request):
     """List all active Categories."""
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
-
     titles = Title.objects.all()
 
-    context = {"titles": titles,
-               }
+    context = { "titles": titles }
     return render(request, "title/index.html", context)
 
 
 @login_required()
+@permission_required('can_manage_titles')
 def new(request):
     """Create a new title."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     context = {
         "form": TitleForm()
@@ -32,11 +28,9 @@ def new(request):
 
 
 @login_required()
+@permission_required('can_manage_titles')
 def create(request):
     """Save new title."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     if request.method not in "POST":
         return HttpResponseNotAllowed(permitted_methods=["POST"])
@@ -50,11 +44,9 @@ def create(request):
 
 
 @login_required()
+@permission_required('can_manage_titles')
 def edit(request, title_id):
     """Edit an existing title."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     try:
         title = Title.objects.get(id=title_id)
@@ -72,11 +64,9 @@ def edit(request, title_id):
 
 
 @login_required()
+@permission_required('can_manage_titles')
 def update(request, title_id):
     """Update existing challenge."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     if request.method not in "POST":
         return HttpResponseNotAllowed(permitted_methods=["POST"])
