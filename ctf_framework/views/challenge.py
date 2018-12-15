@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rules.contrib.views import permission_required
 from .base_view import *
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
@@ -56,11 +57,9 @@ def submit(request):
 
 
 @login_required()
+@permission_required('create_challenge')
 def new(request):
     """Create a new challenge."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     context = {
         "form": ChallengeForm()
@@ -70,11 +69,24 @@ def new(request):
 
 
 @login_required()
+@permission_required('create_challenge')
+def create(request):
+    """Save new challenge."""
+
+    if request.method not in "POST":
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
+
+    form = ChallengeForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Challenge Created!")
+
+    return redirect("ctf_framework:challenge#index")
+
+@login_required()
+@permission_required('update_challenge')
 def edit(request, challenge_id):
     """Edit an existing challenge."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     try:
         challenge = Challenge.objects.get(id=challenge_id)
@@ -92,29 +104,9 @@ def edit(request, challenge_id):
 
 
 @login_required()
-def create(request):
-    """Save new challenge."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
-
-    if request.method not in "POST":
-        return HttpResponseNotAllowed(permitted_methods=["POST"])
-
-    form = ChallengeForm(request.POST)
-    if form.is_valid():
-        form.save()
-        messages.success(request, "Challenge Created!")
-
-    return redirect("ctf_framework:challenge#index")
-
-
-@login_required()
+@permission_required('update_challenge')
 def update(request, challenge_id):
     """Update existing challenge."""
-
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     if request.method not in "POST":
         return HttpResponseNotAllowed(permitted_methods=["POST"])
@@ -133,9 +125,8 @@ def update(request, challenge_id):
 
 
 @login_required()
+@permission_required('delete_challenge')
 def delete(request, challenge_id):
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
 
     if request.method in "GET":
         try:
@@ -152,6 +143,3 @@ def delete(request, challenge_id):
             pass
 
     return redirect("ctf_framework:challenge#index")
-
-
-
