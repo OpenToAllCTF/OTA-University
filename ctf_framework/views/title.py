@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 
 
 @login_required()
-@permission_required('can_manage_titles')
+@permission_required('manage_titles')
 def index(request):
     """List all active Categories."""
     titles = Title.objects.all()
@@ -16,7 +16,7 @@ def index(request):
 
 
 @login_required()
-@permission_required('can_manage_titles')
+@permission_required('manage_titles')
 def new(request):
     """Create a new title."""
 
@@ -28,7 +28,7 @@ def new(request):
 
 
 @login_required()
-@permission_required('can_manage_titles')
+@permission_required('manage_titles')
 def create(request):
     """Save new title."""
 
@@ -44,7 +44,7 @@ def create(request):
 
 
 @login_required()
-@permission_required('can_manage_titles')
+@permission_required('manage_titles')
 def edit(request, title_id):
     """Edit an existing title."""
 
@@ -64,7 +64,7 @@ def edit(request, title_id):
 
 
 @login_required()
-@permission_required('can_manage_titles')
+@permission_required('manage_titles')
 def update(request, title_id):
     """Update existing challenge."""
 

@@ -7,7 +7,7 @@ from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 
 
 @login_required()
-@permission_required('can_manage_categories')
+@permission_required('manage_categories')
 def index(request):
     """List all active Categories."""
 
@@ -18,7 +18,7 @@ def index(request):
 
 
 @login_required()
-@permission_required('can_manage_categories')
+@permission_required('manage_categories')
 def new(request):
     """Create a new category."""
 
@@ -31,7 +31,7 @@ def new(request):
 
 
 @login_required()
-@permission_required('can_manage_categories')
+@permission_required('manage_categories')
 def create(request):
     """Save new category."""
 
@@ -48,7 +48,7 @@ def create(request):
 
 
 @login_required()
-@permission_required('can_manage_categories')
+@permission_required('manage_categories')
 def edit(request, category_id):
     """Edit an existing category."""
 
@@ -67,7 +67,7 @@ def edit(request, category_id):
 
 
 @login_required()
-@permission_required('can_manage_categories')
+@permission_required('manage_categories')
 def update(request, category_id):
     """Update existing challenge."""
 

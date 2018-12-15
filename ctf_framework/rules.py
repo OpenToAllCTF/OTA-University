@@ -25,5 +25,14 @@ rules.add_perm('update_profile', is_staff | is_own_profile)
 rules.add_perm('read_writeups_for_challenge', has_solved_challenge)
 rules.add_perm('create_writeup', has_solved_challenge)
 rules.add_perm('update_writeup', is_own_writeup)
-rules.add_perm('can_manage_categories', is_staff)
-rules.add_perm('can_manage_titles', is_staff)
+
+## Challenges
+rules.add_perm('create_challenge', is_staff)
+rules.add_perm('update_challenge', is_staff)
+rules.add_perm('delete_challenge', is_staff)
+
+## Categories
+rules.add_perm('manage_categories', is_staff)
+
+## Titles
+rules.add_perm('manage_titles', is_staff)
