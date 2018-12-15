@@ -43,15 +43,13 @@ def edit(request, user_id):
     """Edit User Profile."""
     try:
         user_profile = UserProfile.objects.get(id=user_id)
-        request_user_profile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         return redirect("ctf_framework:home#index")
 
-    # Verify user editing their own profile or they are an admin
-    if request_user_profile != user_profile and not request_user_profile.is_staff:
+    if not request.user.has_perm('update_profile', user_profile):
         return HttpResponseForbidden()
 
-    if request_user_profile.is_staff:
+    if request.user.is_staff:
         form = UserProfileAdminForm(instance=user_profile)
     else:
         form = UserProfileForm(instance=user_profile)
@@ -79,7 +77,7 @@ def update(request, user_id):
         return redirect("ctf_framework:home#index")
 
     # Verify user editing their own profile or they are an admin
-    if request_user_profile != user_profile and not request_user_profile.is_staff:
+    if not request.user.has_perm('update_profile', user_profile):
         return HttpResponseForbidden()
 
     if request_user_profile.is_staff:
