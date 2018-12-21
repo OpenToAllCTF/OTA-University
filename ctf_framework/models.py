@@ -2,6 +2,7 @@ from __future__ import division
 from django.db import models
 from django.contrib.auth.models import User
 import math
+from scipy.stats import gamma
 
 class Title(models.Model):
     """Titles that can be awarded to users."""
@@ -108,15 +109,12 @@ class Challenge(models.Model):
     def point_value(self):
         challenge_max = 500.0
         challenge_min = 50.0
-        decay = 30.0
-        value = (
-                    (
-                        (challenge_min - challenge_max) / (decay ** 2)
-                    ) * (self.number_of_solves() ** 2)
-                ) + challenge_max
+        members = 215 #Fetch this automatically from amount of users solved 'read rules. How?
+        solves=self.number_of_solves()
+        value = challenge_min+(members-solves+1)/members*(challenge_max-challenge_min)*gamma.cdf(members**(0.4),solves**(2/3)+1)
 
         value = math.ceil(value)
-        return max(int(value), int(challenge_min))
+        return min(500,max(int(value), int(challenge_min)))
 
     @property
     def first_blood(self):
