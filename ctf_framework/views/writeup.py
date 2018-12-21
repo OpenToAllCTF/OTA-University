@@ -80,7 +80,7 @@ def edit(request, writeup_id):
         writeup = Writeup.objects.get(id=writeup_id)
         challenge = Challenge.objects.get(id=writeup.challenge.id)
 
-        if user.has_solved(challenge) and user == writeup.user:
+        if request.user.has_perm('update_writeup', writeup):
             writeup = Writeup.objects.get(id=writeup_id)
             writeup.markdown = request.POST["markdown"]
             writeup.save()
@@ -97,7 +97,7 @@ def submit(request):
         user = UserProfile.objects.get(user=request.user)
         challenge = Challenge.objects.get(id=request.POST["challenge"])
 
-        if user.has_solved(challenge):
+        if request.user.has_perm('create_writeup', challenge):
             writeup = Writeup.objects.create(user=user, challenge=challenge, markdown=request.POST["markdown"])
             writeup.save()
 
