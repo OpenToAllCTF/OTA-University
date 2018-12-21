@@ -15,7 +15,7 @@ def has_solved_challenge(user, challenge):
 
 @rules.predicate
 def is_own_writeup(user, writeup):
-    return writeup.id in [writeup.id for writeup in user.UserProfile.writeups]
+    return writeup.id in [writeup.id for writeup in user.UserProfile.writeup_set.all()]
 
 # Add permissions
 ## Profiles
