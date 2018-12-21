@@ -27,7 +27,7 @@ class Category(models.Model):
     @property
     def challenges(self):
         """Returns a list of challenges for a given category, sorted by number of solves"""
-        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves())
+        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves)
 
     @property
     def subcategories(self):
@@ -40,7 +40,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class UserProfile(models.Model):
     """Used for storing all user profile information and statistics."""
@@ -96,13 +95,10 @@ class Challenge(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    number_of_solves = models.PositiveIntegerField(null=True)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
-
-    @property
-    def number_of_solves(self):
-        return self.solve_set.count
 
     @property
     def point_value(self):
@@ -112,7 +108,7 @@ class Challenge(models.Model):
         value = (
                     (
                         (challenge_min - challenge_max) / (decay ** 2)
-                    ) * (self.number_of_solves() ** 2)
+                    ) * (self.number_of_solves ** 2)
                 ) + challenge_max
 
         value = math.ceil(value)
@@ -141,6 +137,14 @@ class Solve(models.Model):
     def belongs_to_category(self, category):
         """Checks if a solve belongs to a given category."""
         return self.challenge.category.id == category.id or self.challenge.category.is_child_of(category)
+
+    def save(self, *args, **kwargs):
+
+        super(Solve, self).save(*args, **kwargs)
+
+        # Update number of solves for a challenge when a solve is added
+        self.challenge.number_of_solves = self.challenge.solve_set.count()
+        self.challenge.save()
 
     class Meta:
         ordering = ('date',)
