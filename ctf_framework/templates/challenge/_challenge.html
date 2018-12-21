@@ -23,7 +23,11 @@
       <td> {{ challenge.point_value }} </td>
       <td> {{ challenge.number_of_solves }} </td>
       <td> {{ challenge.first_blood }} </td>
-      <td> {{ challenge.author }} </td>
+      <td>
+        <a href="{% url "ctf_framework:profile#show" challenge.author_id %}">
+          {{ challenge.author.display_name }}
+        </a>
+      </td>
     </tr>
 
     <tr>
