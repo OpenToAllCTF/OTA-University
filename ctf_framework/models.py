@@ -113,7 +113,7 @@ class Challenge(models.Model):
         solves=self.number_of_solves()
         value = challenge_min+(members-solves+1)/members*(challenge_max-challenge_min)*gamma.cdf(members**(0.4),solves**(2/3)+1)
 
-        value = math.ceil(value)
+        value = math.round(value)
         return min(500,max(int(value), int(challenge_min)))
 
     @property
