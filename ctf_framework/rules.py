@@ -21,7 +21,6 @@ def is_own_writeup(user, writeup):
 def is_challenge_author(user, challenge):
     return challenge.author.user == user
 
-
 # Add permissions
 ## Profiles
 rules.add_perm('update_profile', is_staff | is_own_profile)
