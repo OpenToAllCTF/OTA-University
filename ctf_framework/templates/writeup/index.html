@@ -12,17 +12,19 @@
     </thead>
     <tbody>
       {% for writeup in writeups %}
-        <td>
-          <a href="{% url "ctf_framework:profile#show" writeup.user_id %}">
-            {{ writeup.user.display_name }}
-          </a>
-        </td>
-        <td> {{ writeup.created_at }}</td>
-        <td>
-          <a class="btn btn-sm btn-success" href="{% url "ctf_framework:writeup#show" writeup.id%}">
-            View
-          </a>
-        </td>
+        <tr>
+          <td>
+            <a href="{% url "ctf_framework:profile#show" writeup.user_id %}">
+              {{ writeup.user.display_name }}
+            </a>
+          </td>
+          <td> {{ writeup.created_at }}</td>
+          <td>
+            <a class="btn btn-sm btn-success" href="{% url "ctf_framework:writeup#show" writeup.id%}">
+              View
+            </a>
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
