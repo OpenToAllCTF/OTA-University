@@ -6,6 +6,8 @@
       <td>
         {% if is_solved %}
           <span class="mr-2 badge badge-success">Solved </span>
+        {% elif challenge.author.user == request.user %}
+          <span class="mr-2 badge badge-warning">Owner </span>
         {% endif %}
 
         {% if not challenge.is_active %}
@@ -21,7 +23,15 @@
         {% endif %}
       </td>
       <td> {{ challenge.point_value }} </td>
-      <td> {{ challenge.number_of_solves }} </td>
+      <td>
+        {{ challenge.number_of_solves }}
+        {% if is_solved or challenge.author.user == request.user %}
+          <a class="mr-2 badge badge-info float-right"
+             href="{% url "ctf_framework:writeup#index" challenge.id %}"
+             onclick="event.stopPropagation();"
+             role="button">Writeups</a>
+        {% endif %}
+      </td>
       <td> {{ challenge.first_blood }} </td>
       <td>
         <a href="{% url "ctf_framework:profile#show" challenge.author_id %}">
@@ -48,15 +58,6 @@
                   {{ challenge.connection_info }}
               {% endif %}
             </div>
-
-            {% if is_solved %}
-              <div>
-                <hr/>
-                <a class="btn btn-secondary btn-sm"
-                   href="{% url "ctf_framework:writeup#index" challenge.id %}"
-                   role="button">Writeups</a>
-              </div>
-            {% endif %}
           </div>
         </div>
       </td>
