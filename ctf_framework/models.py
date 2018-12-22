@@ -95,7 +95,7 @@ class Challenge(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    number_of_solves = models.PositiveIntegerField(null=True)
+    number_of_solves = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
