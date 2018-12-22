@@ -2,6 +2,7 @@ from __future__ import division
 from django.db import models
 from django.contrib.auth.models import User
 import math
+from .managers import *
 
 class Title(models.Model):
     """Titles that can be awarded to users."""
@@ -23,6 +24,8 @@ class Category(models.Model):
     description = models.CharField(max_length=1000)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+
+    objects = CategoryQuerySet.as_manager()
 
     @property
     def challenges(self):
