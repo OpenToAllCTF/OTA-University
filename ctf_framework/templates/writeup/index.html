@@ -2,22 +2,37 @@
 {% block content %}
 <div class="container">
 
-  <h1>Writeups for <small>{{challenge}}</small></h1>
+  <h3>Writeups for <small>{{challenge.name}}</small></h3>
+
+  <table class="table table-hover mb-0">
+    <thead>
+      <th>Author</th>
+      <th>Updated</th>
+      <th>Writeup</th>
+    </thead>
+    <tbody>
+      {% for writeup in writeups %}
+        <td>
+          <a href="{% url "ctf_framework:profile#show" writeup.user_id %}">
+            {{ writeup.user.display_name }}
+          </a>
+        </td>
+        <td> {{ writeup.created_at }}</td>
+        <td>
+          <a class="btn btn-sm btn-success" href="{% url "ctf_framework:writeup#show" writeup.id%}">
+            View
+          </a>
+        </td>
+      {% endfor %}
+    </tbody>
+  </table>
+
 
   <hr>
-
-  {% for writeup in writeups %}
-      <a href="{% url "ctf_framework:writeup#show" writeup.id%}">{{ writeup }}</a><br>
-  {% empty %}
-      No writeups
-  {% endfor %}
-
-  <hr>
-
   {% if writeup %}
     <form action="{% url 'ctf_framework:writeup#edit' writeup.id %}" method="POST">
         {% csrf_token %}
-        Edit your writeup:
+        <h3>Edit your Writeup</h3>
         <textarea id="markdown" name="markdown">{{writeup.markdown}}</textarea><br>
         <input class="btn btn-success" type="submit" value="Submit">
     </form>
@@ -25,7 +40,7 @@
     <form action="{% url 'ctf_framework:writeup#submit' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="challenge" value="{{ challenge.id }}">
-        Submit your writeup:
+        <h3>Submit your Writeup</h3>
         <textarea id="markdown" name="markdown"></textarea>
         <input class="btn btn-success" type="submit" value="Submit">
     </form>
