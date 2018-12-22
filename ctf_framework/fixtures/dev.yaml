@@ -1,18 +1,17 @@
-- model: ctf_framework.challengecategory
+- model: ctf_framework.category
   pk: 1
-  fields: {category: Web, description: Web}
-- model: ctf_framework.challengecategory
-  pk: 2
-  fields: {category: Pwn, description: Pwn}
+  fields: { name: Web,
+            description: Web,
+            created_at: "2018-05-25 11:12" }
+
 - model: ctf_framework.challenge
   pk: 1
-  fields: {name: Banana, description: banana, flag: 'OTA{300}', point_value: 300,
-    is_active: true, category: 1, url: test}
-- model: ctf_framework.challenge
-  pk: 2
-  fields: {name: Oranges, description: Oranges, flag: 'OTA{400}', point_value: 400,
-    is_active: true, category: 1, url: asd}
-- model: ctf_framework.challenge
-  pk: 3
-  fields: {name: House of Bananas, description: Bananas, flag: 'OTA{500}', point_value: 500,
-    is_active: true, category: 2, url: asdf}
+  fields: { name: Banana,
+            author_id: 1,
+            description: 'A challenge',
+            flag: 'OTA{a_flag}',
+            is_active: True,
+            category_id: 1,
+            connection_info: 'nc 127.0.0.1 1337',
+            created_at: "2018-05-25 11:12",
+            number_of_solves: 0 }
