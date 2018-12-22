@@ -21,6 +21,10 @@ const load_themes = async () => {
   for (const theme of data.themes) {
     themesDiv.appendChild(create_theme(theme.name, theme.cssCdn));
   }
+
+  const custom = create_theme("Custom", "");
+  custom.onclick = () => change_theme(prompt("Enter a bootstrap theme url"));
+  themesDiv.appendChild(custom);
 };
 
 $(document).ready(() => {
