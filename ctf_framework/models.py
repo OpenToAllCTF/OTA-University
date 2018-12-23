@@ -114,7 +114,7 @@ class Challenge(models.Model):
         value = challenge_min+(members-solves+1)/members*(challenge_max-challenge_min)*gamma.cdf(members**(0.4),solves**(2/3)+1)
 
         value = round(value)
-        return min(500,max(int(value), int(challenge_min)))
+        return min(int(challenge_max),max(int(value), int(challenge_min)))
 
     @property
     def first_blood(self):
