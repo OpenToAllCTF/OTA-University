@@ -32,8 +32,8 @@
              role="button">Writeups</a>
         {% endif %}
       </td>
-      <td> {{ challenge.first_blood }} </td>
-      <td>
+      <td class="d-none d-sm-table-cell"> {{ challenge.first_blood }} </td>
+      <td class="d-none d-sm-table-cell">
         <a href="{% url "ctf_framework:profile#show" challenge.author_id %}">
           {{ challenge.author.display_name }}
         </a>

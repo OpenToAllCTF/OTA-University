@@ -31,7 +31,7 @@
           <tr>
             <th>Challenge Name</th>
             <th>Category</th>
-            <th>Validation date</th>
+            <th class="d-none d-sm-table-cell">Validation date</th>
             <th>Writeups</th>
           </tr>
         </thead>
@@ -48,7 +48,7 @@
 
               </td>
               <td> {{ solve.challenge.category.name }} </td>
-              <td> {{ solve.date|date:"Y-m-d H:i:s" }} </td>
+              <td class="d-none d-sm-table-cell"> {{ solve.date|date:"Y-m-d H:i:s" }} </td>
               <td style="width: 1%">
                 {% if solve.challenge.user_writeup %}
                   <div class="btn btn-sm btn-secondary mx-auto">
