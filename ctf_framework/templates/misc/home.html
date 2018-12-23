@@ -1,12 +1,12 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
-  <div class="table-responsive center-content">
+  <div class="container">
   <h4>Leaderboard</h4>
     <table class="table table-bordered">
       <tr>
         <th>Rank</th>
         <th>Users</th>
-        <th>Latest Validation</th>
+        <th class="d-none d-sm-table-cell">Latest Validation</th>
         <th>Score</th>
       </tr>
 
@@ -21,7 +21,7 @@
             </span>
           {% endif %}
         </td>
-        <td>{{ user.1.last_solve_time|date:"Y-m-d H:i:s" }}</td>
+        <td class="d-none d-sm-table-cell">{{ user.1.last_solve_time|date:"Y-m-d H:i:s" }}</td>
         <td>{{ user.1.score }}</td>
       </tr>
       {% endfor %}
