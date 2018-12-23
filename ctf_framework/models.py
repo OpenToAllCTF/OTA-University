@@ -2,7 +2,10 @@ from __future__ import division
 from django.db import models
 from django.contrib.auth.models import User
 import math
+from .managers import *
 from scipy.stats import gamma
+
+
 
 class Title(models.Model):
     """Titles that can be awarded to users."""
@@ -25,10 +28,12 @@ class Category(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    objects = CategoryQuerySet.as_manager()
+
     @property
     def challenges(self):
         """Returns a list of challenges for a given category, sorted by number of solves"""
-        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves())
+        return sorted(self.challenge_set.all(), key=lambda c: -c.number_of_solves)
 
     @property
     def subcategories(self):
@@ -41,7 +46,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class UserProfile(models.Model):
     """Used for storing all user profile information and statistics."""
@@ -97,23 +101,21 @@ class Challenge(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     connection_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    number_of_solves = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return "{} | {} | {}".format(self.category, self.point_value, self.name)
 
     @property
-    def number_of_solves(self):
-        return self.solve_set.count
-
-    @property
     def point_value(self):
         challenge_max = 500.0
         challenge_min = 50.0
-        members = 215 #Fetch this automatically from amount of users solved 'read rules. How?
-        solves=self.number_of_solves()
+        members = Challenge.objects.get(name='Read The Rules').number_of_solves
+
+        solves=self.number_of_solves
         value = challenge_min+(members-solves+1)/members*(challenge_max-challenge_min)*gamma.cdf(members**(0.4),solves**(2/3)+1)
 
-        value = math.round(value)
+        value = round(value)
         return min(500,max(int(value), int(challenge_min)))
 
     @property
@@ -139,6 +141,14 @@ class Solve(models.Model):
     def belongs_to_category(self, category):
         """Checks if a solve belongs to a given category."""
         return self.challenge.category.id == category.id or self.challenge.category.is_child_of(category)
+
+    def save(self, *args, **kwargs):
+
+        super(Solve, self).save(*args, **kwargs)
+
+        # Update number of solves for a challenge when a solve is added
+        self.challenge.number_of_solves = self.challenge.solve_set.count()
+        self.challenge.save()
 
     class Meta:
         ordering = ('date',)
