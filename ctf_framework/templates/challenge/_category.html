@@ -9,12 +9,12 @@
         <th>Name</th>
         <th>Point Value</th>
         <th># of solves</th>
-        <th>First Blood</th>
-        <th>Author</th>
+        <th class="d-none d-sm-table-cell">First Blood</th>
+        <th class="d-none d-sm-table-cell">Author</th>
       </thead>
       <tbody>
         {% for challenge in category.challenges %}
-          {% if challenge in solved_challenges %}
+          {% if challenge.id in solved_challenge_ids %}
             {% include "challenge/_challenge.html" with challenge=challenge is_solved=True %}
           {% else %}
             {% include "challenge/_challenge.html" with challenge=challenge is_solved=False %}
@@ -39,12 +39,12 @@
           <th>Name</th>
           <th>Point Value</th>
           <th># of solves</th>
-          <th>First Blood</th>
-          <th>Author</th>
+          <th class="d-none d-sm-table-cell">First Blood</th>
+          <th class="d-none d-sm-table-cell">Author</th>
         </thead>
         <tbody>
           {% for challenge in subcategory.challenges %}
-            {% if challenge in solved_challenges %}
+            {% if challenge.id in solved_challenge_ids %}
               {% include "challenge/_challenge.html" with challenge=challenge is_solved=True %}
             {% else %}
               {% include "challenge/_challenge.html" with challenge=challenge is_solved=False %}

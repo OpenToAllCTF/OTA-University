@@ -1,26 +1,28 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
-  <div class="table-responsive center-content">
+  <div class="container">
   <h4>Leaderboard</h4>
     <table class="table table-bordered">
       <tr>
+        <th>Rank</th>
         <th>Users</th>
-        <th>Latest Validation</th>
+        <th class="d-none d-sm-table-cell">Latest Validation</th>
         <th>Score</th>
       </tr>
 
       {% for user in users %}
       <tr>
+        <td>{{ user.0 }}</td>
         <td>
-          <a href="{% url 'ctf_framework:profile#show' user.id %}">{{ user }}</a>
-          {% if user.active_title %}|
+          <a href="{% url 'ctf_framework:profile#show' user.1.id %}">{{ user.1 }}</a>
+          {% if user.1.active_title %}|
             <span class="badge badge-dark">
-                {{ user.active_title }}
+                {{ user.1.active_title }}
             </span>
           {% endif %}
         </td>
-        <td>{{ user.last_solve_time|date:"Y-m-d H:i:s" }}</td>
-        <td>{{ user.score }}</td>
+        <td class="d-none d-sm-table-cell">{{ user.1.last_solve_time|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ user.1.score }}</td>
       </tr>
       {% endfor %}
     </table>

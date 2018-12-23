@@ -5,8 +5,6 @@ import math
 from .managers import *
 from scipy.stats import gamma
 
-
-
 class Title(models.Model):
     """Titles that can be awarded to users."""
 

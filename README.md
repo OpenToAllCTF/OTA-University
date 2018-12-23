@@ -24,8 +24,40 @@ More information [here](https://api.slack.com/applications).
 - `python3 manage.py migrate`
 - `python3 manage.py runserver`
 
-# Creating an Administrator Account
-To create new admin accounts, use the following command :
-`python3 manage.py createsuperuser`
+# Seeding database
 
-Visit `{URL}/admin` to login with the new account.
+The database can be seeded with default values through the `ctf_framework/fixtures/dev.yaml` file.
+
+To do so, use the following command : `python3 manage.py loaddata dev`
+
+# Becoming an admin
+
+To become an admin of OTA University, you need to set your User object's `is_staff` property to `True`. You can do this via the `manage.py shell` command :
+
+```
+$ python3 manage.py shell
+Python 3.7.0 (default, Dec 15 2018, 22:16:40)
+[Clang 10.0.0 (clang-1000.10.44.4)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from ctf_framework.models import User
+>>> user = User.objects.first()
+>>> user.is_staff = True
+>>> user.save()
+```
+
+# Faking challenge solves
+
+You can manipulate the database easily via `manage.py shell`. For example, in order to
+add solves to a challenge, we can manually create `Solve` objects and link them to your account :
+
+```
+$ python3 manage.py shell
+Python 3.7.0 (default, Dec 15 2018, 22:16:40)
+[Clang 10.0.0 (clang-1000.10.44.4)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from ctf_framework.models import Solve, Challenge
+>>> challenge = Challenge.objects.first()
+>>> [Solve.objects.create(user_id=1, challenge=challenge) for i in range(0x20)]
+```

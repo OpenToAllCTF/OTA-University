@@ -1,16 +1,24 @@
 {% extends "../layouts/base.html" %}
 {% block content %}
 <div class="container">
-  <a href="{% url "ctf_framework:writeup#index" writeup.challenge.id %}">
-    {{ writeup.challenge }}
-  </a>
-
-  <br>
-
-  <hr>
-  {{ writeup }}
-  <hr>
-
-  <div id="rendered-markdown">{{ html }}</div>
+  <div class="card">
+    <div class="card-header">
+      Writeup for
+      <small>
+        <a href="{% url "ctf_framework:writeup#index" writeup.challenge.id %}">
+          {{writeup.challenge.name}}
+        </a>
+      </small>
+      by
+      <small>
+        <a href="{% url "ctf_framework:profile#show" writeup.user_id %}">
+          {{ writeup.user.display_name }}
+        </a>
+      </small>
+    </div>
+    <div class="card-body">
+      <div id="rendered-markdown">{{ html }}</div>
+    </div>
+  </div>
 </div>
 {% endblock %}

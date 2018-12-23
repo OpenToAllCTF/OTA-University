@@ -13,7 +13,6 @@
               </div>
               {% csrf_token %}
 
-              {# Show "Create challenge" button if staff #}
               {% if request.user.is_staff %}
                 <a class="btn btn-primary ml-2"
                   href="{% url "ctf_framework:challenge#new" %}">Create Challenge</a>

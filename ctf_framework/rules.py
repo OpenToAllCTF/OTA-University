@@ -17,13 +17,17 @@ def has_solved_challenge(user, challenge):
 def is_own_writeup(user, writeup):
     return writeup.id in [writeup.id for writeup in user.UserProfile.writeup_set.all()]
 
+@rules.predicate
+def is_challenge_author(user, challenge):
+    return challenge.author.user == user
+
 # Add permissions
 ## Profiles
 rules.add_perm('update_profile', is_staff | is_own_profile)
 
 ## Writeups
-rules.add_perm('read_writeups_for_challenge', has_solved_challenge)
-rules.add_perm('create_writeup', has_solved_challenge)
+rules.add_perm('read_writeups_for_challenge', has_solved_challenge | is_challenge_author)
+rules.add_perm('create_writeup', has_solved_challenge | is_challenge_author)
 rules.add_perm('update_writeup', is_own_writeup)
 
 ## Challenges
