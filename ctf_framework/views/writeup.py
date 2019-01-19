@@ -5,22 +5,12 @@ from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.utils.safestring import mark_safe
 from markdown import markdown
 from bleach import clean
+from bleach_whitelist import markdown_attrs, markdown_tags
 
-markdown_tags = [
-    "h1", "h2", "h3", "h4", "h5", "h6",
-    "b", "i", "strong", "em", "tt",
-    "p", "br",
-    "span", "div", "blockquote", "code", "hr", "pre",
-    "ul", "ol", "li", "dd", "dt",
-    "img",
-    "a",
-]
+safe_tags = set(markdown_tags + ["table", "thead", "tbody", "tfoot", "tr", "th", "td", "pre"])
 
-markdown_attrs = {
-    "img": ["src", "alt", "title"],
-    "a": ["href", "alt", "title"],
-    "*": ["class"],
-}
+safe_attrs = {"*": ["class", "style"]}
+safe_attrs.update(markdown_attrs)
 
 @login_required()
 def index(request, challenge_id):
@@ -56,9 +46,13 @@ def show(request, writeup_id):
 
     challenge = Challenge.objects.get(id=writeup.challenge.id)
     html = clean(
-        markdown(writeup.markdown, extensions=['markdown.extensions.fenced_code', 'markdown.extensions.codehilite']),
-        markdown_tags,
-        markdown_attrs
+        markdown(
+            writeup.markdown,
+            extensions=['markdown.extensions.fenced_code', 'markdown.extensions.codehilite'],
+            extension_configs={ "markdown.extensions.codehilite": { "linenums": False }}
+        ),
+        safe_tags,
+        safe_attrs
     )
 
     if request.user.has_perm('read_writeups_for_challenge', challenge):
