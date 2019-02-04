@@ -1,2 +1,2 @@
 #! /bin/bash
-cd /usr/src/app && python app.py
+cd /usr/src/app && python -u app.py
