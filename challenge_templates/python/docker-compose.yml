@@ -1,0 +1,7 @@
+version: '2'
+services:
+  python:
+    build: .
+    ports:
+     - "17001:31337"
+    entrypoint: /etc/run_xinetd.sh
