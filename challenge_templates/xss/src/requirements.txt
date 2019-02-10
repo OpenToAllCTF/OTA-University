@@ -1,0 +1,3 @@
+pyppeteer==0.0.25
+quart==0.6.12
+hypercorn==0.5.2

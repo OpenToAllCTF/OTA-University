@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Index</title>
+  </head>
+  <body>
+      <form method="get" action="{{ url_for('index') }}">
+        <input type="text" name="xss" />
+      </form>
+      <a href="{{ url_for('source') }}">Source</a>
+    </div>
+    {{session["xss"] | safe}}
+  </body>
+</html>
