@@ -1,0 +1,1 @@
+FLAG = "OTA{super_secret_flag}"

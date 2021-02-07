@@ -1,0 +1,7 @@
+version: '2'
+services:
+  xss:
+    restart: always
+    build: .
+    ports:
+     - "17000:5000"
